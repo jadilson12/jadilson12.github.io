@@ -13,6 +13,7 @@ interface BlogListProps {
   selectedTag?: string;
   onDateClick: (date: string) => void;
   onTagClick: (tag: string) => void;
+  isPending?: boolean;
 }
 
 const BlogList: React.FC<BlogListProps> = ({
@@ -20,7 +21,8 @@ const BlogList: React.FC<BlogListProps> = ({
   selectedDate,
   selectedTag,
   onDateClick,
-  onTagClick
+  onTagClick,
+  isPending = false,
 }) => {
   const [sortType, setSortType] = React.useState<'relevant' | 'latest' | 'top'>('latest');
   const [timePeriod, setTimePeriod] = React.useState<'week' | 'month' | 'year' | 'infinity'>('infinity');
@@ -112,12 +114,13 @@ const BlogList: React.FC<BlogListProps> = ({
 
   // Infinite scroll with Intersection Observer
   React.useEffect(() => {
-    if (!loadMoreRef.current) return;
+    const currentRef = loadMoreRef.current;
+    if (!currentRef || !hasMore || isLoading) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting && hasMore && !isLoading) {
+        if (entry.isIntersecting && !isLoading) {
           setIsLoading(true);
           // Simulate loading delay for smoother UX
           setTimeout(() => {
@@ -133,12 +136,10 @@ const BlogList: React.FC<BlogListProps> = ({
       }
     );
 
-    observer.observe(loadMoreRef.current);
+    observer.observe(currentRef);
 
     return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
-      }
+      observer.disconnect();
     };
   }, [hasMore, isLoading]);
 
@@ -239,8 +240,8 @@ const BlogList: React.FC<BlogListProps> = ({
               </motion.div>
             )}
 
-            {/* Blog Posts Grid */}
-            <div className="grid grid-cols-1 gap-6">
+            {/* Blog Posts Grid with React 19 useTransition feedback */}
+            <div className={`grid grid-cols-1 gap-6 transition-opacity duration-200 ${isPending ? 'opacity-60' : 'opacity-100'}`}>
               {displayedPosts.map((post, index) => (
                 <motion.article
                   key={post.id}
