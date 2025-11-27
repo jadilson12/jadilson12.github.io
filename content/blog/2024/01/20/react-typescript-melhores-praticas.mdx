@@ -1,0 +1,112 @@
+---
+title: "React e TypeScript: Melhores Práticas para 2024"
+date: "2024-01-20"
+description: "Aprenda as melhores práticas para construir aplicações React com TypeScript, incluindo segurança de tipos, padrões de componentes e otimização de performance."
+tags: ["react", "typescript", "melhores-praticas", "javascript"]
+---
+
+# React e TypeScript: Melhores Práticas para 2024
+
+TypeScript se tornou o padrão de facto para construir aplicações React em larga escala. Neste post, vou compartilhar algumas melhores práticas que aprendi ao longo dos anos.
+
+## 1. Use Componentes Funcionais com Tipagem Adequada
+
+Sempre type seus componentes funcionais corretamente:
+
+```typescript
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary';
+}
+
+const Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) => {
+  return (
+    <button onClick={onClick} className={`btn btn-${variant}`}>
+      {label}
+    </button>
+  );
+};
+```
+
+## 2. Aproveite a Inferência de Tipos
+
+TypeScript é inteligente o suficiente para inferir tipos em muitos casos. Deixe-o trabalhar para você:
+
+```typescript
+// Não é necessário type explicitamente o valor de retorno
+const getUserName = (user: User) => {
+  return user.firstName + ' ' + user.lastName;
+};
+
+// TypeScript sabe que isso é uma string[]
+const names = users.map(user => user.name);
+```
+
+## 3. Use Unions Discriminadas para Estado
+
+Este padrão é incrivelmente útil para gerenciar estado complexo:
+
+```typescript
+type LoadingState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: Data }
+  | { status: 'error'; error: Error };
+
+const Component: React.FC = () => {
+  const [state, setState] = useState<LoadingState>({ status: 'idle' });
+
+  // TypeScript sabe quais propriedades estão disponíveis
+  if (state.status === 'success') {
+    console.log(state.data); // ✅ data está disponível
+  }
+};
+```
+
+## 4. Crie Componentes Genéricos Reutilizáveis
+
+Componentes genéricos podem funcionar com múltiplos tipos mantendo a segurança de tipos:
+
+```typescript
+interface ListProps<T> {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+}
+
+function List<T>({ items, renderItem }: ListProps<T>) {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{renderItem(item)}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## 5. Use `as const` para Melhor Inferência de Tipos
+
+```typescript
+const COLORS = {
+  primary: '#c9f31d',
+  dark: '#0a0a0a',
+} as const;
+
+type Color = typeof COLORS[keyof typeof COLORS];
+// Color é '#c9f31d' | '#0a0a0a'
+```
+
+## Conclusão
+
+Essas práticas me ajudaram a escrever aplicações React mais sustentáveis e livres de bugs. O sistema de tipos do TypeScript é poderoso, e quando usado corretamente, pode pegar erros antes que eles cheguem à produção.
+
+Quais são seus padrões favoritos de React + TypeScript? Me conte!
+
+## 📚 Referências
+
+- [Documentação Oficial do React](https://pt-br.react.dev/) - Documentação oficial do React em português com guias completos e referência da API
+- [Documentação Oficial do TypeScript](https://www.typescriptlang.org/pt/docs/) - Manual do TypeScript e referência da linguagem
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/) - Guia da comunidade para TypeScript com React
+- [TypeScript Deep Dive](https://basarat.gitbook.io/typescript/) - Livro open source sobre TypeScript
+- [React Patterns](https://reactpatterns.com/) - Coleção de padrões de design para desenvolvimento React

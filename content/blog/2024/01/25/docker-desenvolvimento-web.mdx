@@ -1,0 +1,123 @@
+---
+title: "Docker para Desenvolvimento Web: Guia Completo"
+date: "2024-01-25"
+description: "Aprenda como usar Docker para criar ambientes de desenvolvimento consistentes e otimizar seu fluxo de trabalho de desenvolvimento web."
+tags: ["docker", "devops", "desenvolvimento-web", "containers"]
+---
+
+# Docker para Desenvolvimento Web: Guia Completo
+
+Docker revolucionou a forma como desenvolvemos e implantamos aplicações. Neste guia, vou mostrar como usar Docker para criar ambientes de desenvolvimento consistentes.
+
+## Por Que Usar Docker?
+
+Docker resolve vários problemas comuns no desenvolvimento:
+
+- **Consistência**: "Funciona na minha máquina" deixa de ser um problema
+- **Isolamento**: Cada projeto tem suas próprias dependências
+- **Reprodutibilidade**: Fácil onboarding de novos desenvolvedores
+- **Portabilidade**: O mesmo ambiente em dev, staging e produção
+
+## Configuração Básica com Docker Compose
+
+Um exemplo de setup full-stack com React, AdonisJS e PostgreSQL:
+
+```yaml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    ports:
+      - "3333:3333"
+    environment:
+      DATABASE_URL: postgresql://admin:secret@postgres:5432/myapp
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:3333
+
+volumes:
+  postgres_data:
+```
+
+## Dockerfile para Aplicação Node.js
+
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3333
+
+CMD ["npm", "run", "dev"]
+```
+
+## Melhores Práticas
+
+1. **Use .dockerignore**: Similar ao .gitignore, evite copiar arquivos desnecessários
+2. **Multi-stage Builds**: Reduza o tamanho da imagem final
+3. **Cache de Layers**: Organize seu Dockerfile para aproveitar o cache
+4. **Variáveis de Ambiente**: Use .env files para configurações sensíveis
+5. **Volumes**: Use volumes para persistência de dados e hot-reload
+
+## Comandos Úteis
+
+```bash
+# Iniciar todos os serviços
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Parar todos os serviços
+docker-compose down
+
+# Rebuild containers
+docker-compose up --build
+
+# Executar comandos em um container
+docker-compose exec backend npm run migrate
+```
+
+## Conclusão
+
+Docker pode parecer complexo no início, mas uma vez que você domina os conceitos básicos, ele se torna uma ferramenta indispensável no seu toolkit de desenvolvimento.
+
+Confira meu [repositório docker-compose-stack](https://github.com/jadilson12/docker-compose-stack) para um exemplo completo de configuração!
+
+## 📚 Referências
+
+- [Documentação Oficial do Docker](https://docs.docker.com/) - Documentação completa do Docker com guias e tutoriais
+- [Docker Compose Documentation](https://docs.docker.com/compose/) - Guia oficial do Docker Compose
+- [Dockerfile Best Practices](https://docs.docker.com/develop/dev-best-practices/) - Melhores práticas oficiais para Dockerfiles
+- [Docker Hub](https://hub.docker.com/) - Repositório oficial de imagens Docker
+- [Docker Samples](https://github.com/docker/awesome-compose) - Exemplos oficiais de configurações Docker Compose
