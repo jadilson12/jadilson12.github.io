@@ -1,5 +1,5 @@
 'use client';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -59,8 +59,8 @@ const Header: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-white">Jadilson</span>
-                <span className="text-primary-300">.</span>
+                <span className="text-white">jadilson</span>
+                <span className="text-primary-300">.dev</span>
               </motion.span>
             </Link>
 
