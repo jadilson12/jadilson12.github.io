@@ -14,6 +14,12 @@ export default function BlogPage() {
 
   return (
     <Layout>
+      {/* React 19: Native document metadata support */}
+      <title>Blog | Jadilson Guedes</title>
+      <meta name="description" content="Artigos sobre desenvolvimento web, programação e tecnologia por Jadilson Guedes" />
+      <meta property="og:title" content="Blog | Jadilson Guedes" />
+      <meta property="og:description" content="Artigos sobre desenvolvimento web, programação e tecnologia" />
+
       <Header />
       <BlogPageClient posts={posts} />
     </Layout>

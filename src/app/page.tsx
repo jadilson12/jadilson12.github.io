@@ -21,6 +21,12 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <Layout>
+      {/* React 19: Native document metadata support */}
+      <title>Jadilson Guedes - Engenheiro de Software</title>
+      <meta name="description" content="Portfólio de Jadilson Guedes, Engenheiro de Software apaixonado por criar experiências digitais com tecnologias modernas" />
+      <meta property="og:title" content="Jadilson Guedes - Engenheiro de Software" />
+      <meta property="og:description" content="Portfólio de Jadilson Guedes, Engenheiro de Software" />
+
       <Header />
       <Hero />
       <Contact />

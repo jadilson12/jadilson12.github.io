@@ -58,6 +58,17 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   return (
     <Layout>
+      {/* React 19: Native document metadata support */}
+      <title>{post.title} | Jadilson Guedes</title>
+      <meta name="description" content={post.description} />
+      <meta property="og:title" content={post.title} />
+      <meta property="og:description" content={post.description} />
+      <meta property="og:type" content="article" />
+      <meta property="article:published_time" content={new Date(post.date).toISOString()} />
+      {post.tags && post.tags.map(tag => (
+        <meta key={tag} property="article:tag" content={tag} />
+      ))}
+
       <Header />
       <BlogPostContent post={post}>
         <MDXRemote source={post.content || ''} components={components} />
