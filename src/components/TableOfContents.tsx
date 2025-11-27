@@ -49,23 +49,6 @@ const TableOfContents: React.FC = () => {
 
     elements.forEach((element) => observer.observe(element));
 
-    // Scroll to hash if present in URL
-    const hash = window.location.hash.substring(1);
-    if (hash) {
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          const offset = 100;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth',
-          });
-        }
-      }, 100);
-    }
-
     return () => {
       elements.forEach((element) => observer.unobserve(element));
     };
@@ -79,13 +62,13 @@ const TableOfContents: React.FC = () => {
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-      // Update URL hash for deep linking
-      window.history.pushState(null, '', `#${id}`);
-
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
       });
+
+      // Update active ID manually
+      setActiveId(id);
     }
   };
 

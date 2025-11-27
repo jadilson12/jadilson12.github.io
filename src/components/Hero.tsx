@@ -11,12 +11,8 @@ const Hero: React.FC = () => {
     offset: ['start start', 'end start'],
   });
 
-  // Parallax effects
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  // Simplified parallax effects for better performance
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
-  const blurValue = useTransform(scrollYProgress, [0, 1], [0, 10]);
-  const blur = useTransform(blurValue, (value) => `blur(${value}px)`);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -47,93 +43,40 @@ const Hero: React.FC = () => {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background pattern with parallax */}
-      <motion.div
-        className="absolute inset-0 bg-grid-pattern opacity-20"
-        style={{ y }}
-      />
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-20" />
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-dark-900 via-dark-900/50 to-dark-900" />
 
-      {/* Floating gradient orbs with parallax */}
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-300/10 rounded-full blur-3xl"
-        style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '30%']) }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-          x: [0, 50, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut' as const,
-        }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl"
-        style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '-20%']) }}
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.5, 0.3, 0.5],
-          x: [0, -50, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut' as const,
-          delay: 1,
-        }}
-      />
+      {/* Simplified gradient orbs - static for better performance */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-300/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl" />
 
-      {/* Additional depth layers */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-primary-400/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
-        style={{ scale, opacity: useTransform(scrollYProgress, [0, 1], [1, 0.5]) }}
-        animate={{
-          rotate: [0, 360],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-      />
-
-      {/* Content with parallax */}
+      {/* Content - simplified animations */}
       <motion.div
         className="container-custom relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        style={{ opacity, filter: blur }}
+        style={{ opacity }}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '15%']) }}
-          >
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-bold mb-4 md:mb-6 leading-tight px-4">
-              Olá, eu sou <GradientText animate={true}>Jadilson Guedes</GradientText>
-            </h1>
-          </motion.div>
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-bold mb-4 md:mb-6 leading-tight px-4">
+            Olá, eu sou <GradientText animate={true}>Jadilson Guedes</GradientText>
+          </h1>
 
-          <motion.div
-            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '10%']) }}
+          <AnimatedWords
+            as="p"
+            delay={0.8}
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
           >
-            <AnimatedWords
-              as="p"
-              delay={0.8}
-              className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
-            >
-              Engenheiro de Software apaixonado por criar experiências digitais incríveis com tecnologias modernas
-            </AnimatedWords>
-          </motion.div>
+            Engenheiro de Software apaixonado por criar experiências digitais incríveis com tecnologias modernas
+          </AnimatedWords>
 
           <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-8 md:mb-12 px-4"
-            style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '5%']) }}
           >
             <Link href="/sobre" className="relative group w-full sm:w-auto">
               <motion.div
