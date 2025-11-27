@@ -24,14 +24,12 @@ const BlogList: React.FC<BlogListProps> = ({
   onTagClick,
   isPending = false,
 }) => {
-  const [sortType, setSortType] = React.useState<'relevant' | 'latest' | 'top'>('latest');
-  const [timePeriod, setTimePeriod] = React.useState<'week' | 'month' | 'year' | 'infinity'>('infinity');
   const [displayCount, setDisplayCount] = React.useState(10);
   const [isLoading, setIsLoading] = React.useState(false);
   const POSTS_PER_LOAD = 10;
   const loadMoreRef = React.useRef<HTMLDivElement>(null);
 
-  // Filter and sort posts based on selected date, tag, sort type, and time period
+  // Filter and sort posts based on selected date and tag
   const filteredPosts = React.useMemo(() => {
     let filtered = posts;
 
@@ -54,59 +52,18 @@ const BlogList: React.FC<BlogListProps> = ({
       );
     }
 
-    // Apply time period filter
-    if (timePeriod !== 'infinity') {
-      const now = new Date();
-      const cutoffDate = new Date();
-
-      if (timePeriod === 'week') {
-        cutoffDate.setDate(now.getDate() - 7);
-      } else if (timePeriod === 'month') {
-        cutoffDate.setMonth(now.getMonth() - 1);
-      } else if (timePeriod === 'year') {
-        cutoffDate.setFullYear(now.getFullYear() - 1);
-      }
-
-      filtered = filtered.filter((post) => {
-        const postDate = new Date(post.date);
-        return postDate >= cutoffDate;
-      });
-    }
-
-    // Apply sorting
+    // Sort by most recent date
     const sorted = [...filtered].sort((a, b) => {
-      if (sortType === 'latest') {
-        // Sort by most recent date
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      } else if (sortType === 'relevant') {
-        // Sort by tag relevance first, then by date
-        if (selectedTag) {
-          const aTagCount = a.tags?.filter(tag => tag === selectedTag).length || 0;
-          const bTagCount = b.tags?.filter(tag => tag === selectedTag).length || 0;
-          if (aTagCount !== bTagCount) return bTagCount - aTagCount;
-        }
-        // If no tag selected or same tag count, sort by tags length (more tags = more relevant)
-        const aTagsLength = a.tags?.length || 0;
-        const bTagsLength = b.tags?.length || 0;
-        if (aTagsLength !== bTagsLength) return bTagsLength - aTagsLength;
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      } else if (sortType === 'top') {
-        // Sort by title length and tags (more content = more popular)
-        const aScore = (a.title?.length || 0) + (a.tags?.length || 0) * 10 + (a.description?.length || 0);
-        const bScore = (b.title?.length || 0) + (b.tags?.length || 0) * 10 + (b.description?.length || 0);
-        if (aScore !== bScore) return bScore - aScore;
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      }
-      return 0;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
     return sorted;
-  }, [posts, selectedDate, selectedTag, sortType, timePeriod]);
+  }, [posts, selectedDate, selectedTag]);
 
   // Reset display count when filters change
   React.useEffect(() => {
     setDisplayCount(POSTS_PER_LOAD);
-  }, [selectedDate, selectedTag, sortType, timePeriod]);
+  }, [selectedDate, selectedTag]);
 
   // Get posts to display
   const displayedPosts = filteredPosts.slice(0, displayCount);
@@ -150,70 +107,6 @@ const BlogList: React.FC<BlogListProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Blog Posts - Left Side */}
           <div className="lg:col-span-8">
-            {/* Sort and Filter Controls */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-dark-900/50 rounded-lg border border-dark-800"
-            >
-              {/* Results Counter */}
-              <div className="mb-3 pb-3 border-b border-dark-800">
-                <span className="text-dark-400 text-sm">
-                  Exibindo <span className="text-primary-300 font-semibold">{filteredPosts.length}</span> de{' '}
-                  <span className="text-white font-semibold">{posts.length}</span> posts
-                </span>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                {/* Sort Type Buttons */}
-                <div className="flex gap-2 flex-wrap">
-                  {[
-                    { value: 'relevant' as const, label: 'Relevant' },
-                    { value: 'latest' as const, label: 'Latest' },
-                    { value: 'top' as const, label: 'Top' },
-                  ].map((sort) => (
-                    <motion.button
-                      key={sort.value}
-                      onClick={() => setSortType(sort.value)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        sortType === sort.value
-                          ? 'bg-primary-300 text-dark-950 shadow-lg shadow-primary-300/20'
-                          : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {sort.label}
-                    </motion.button>
-                  ))}
-                </div>
-
-                {/* Time Period Buttons */}
-                <div className="flex gap-2 flex-wrap">
-                  {[
-                    { value: 'week' as const, label: 'Week' },
-                    { value: 'month' as const, label: 'Month' },
-                    { value: 'year' as const, label: 'Year' },
-                    { value: 'infinity' as const, label: 'Infinity' },
-                  ].map((period) => (
-                    <motion.button
-                      key={period.value}
-                      onClick={() => setTimePeriod(period.value)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        timePeriod === period.value
-                          ? 'bg-primary-300 text-dark-950 shadow-lg shadow-primary-300/20'
-                          : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {period.label}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
             {/* Active Filters */}
             {(selectedDate || selectedTag) && (
               <motion.div

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizador de Ícones - jadilson.dev</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #f5f5f5;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      color: #0a0a0a;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #737373;
+      margin-bottom: 40px;
+    }
+    
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .icon-card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .icon-card img {
+      width: 100%;
+      height: auto;
+      max-width: 200px;
+      margin: 0 auto;
+      display: block;
+    }
+    
+    .icon-size {
+      margin-top: 15px;
+      color: #0a0a0a;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .icon-dimensions {
+      color: #737373;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    
+    .main-icon {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      padding: 60px;
+      border-radius: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .main-icon img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+    }
+    
+    .instructions {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 40px;
+      border-left: 4px solid #c9f31d;
+    }
+    
+    .instructions h2 {
+      color: #0a0a0a;
+      margin-top: 0;
+    }
+    
+    .instructions code {
+      background: #f5f5f5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+    }
+    
+    .instructions pre {
+      background: #0a0a0a;
+      color: #c9f31d;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Ícones jadilson.dev</h1>
+    <p class="subtitle">Visualização do ícone SVG em diferentes tamanhos</p>
+    
+    <div class="main-icon">
+      <img src="/icons/icon.svg" alt="jadilson.dev icon">
+    </div>
+    
+    <h2>Tamanhos para PWA</h2>
+    <div class="icon-grid">
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 72x72" style="max-width: 72px;">
+        <div class="icon-size">icon-72x72.png</div>
+        <div class="icon-dimensions">72 × 72 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 96x96" style="max-width: 96px;">
+        <div class="icon-size">icon-96x96.png</div>
+        <div class="icon-dimensions">96 × 96 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 128x128" style="max-width: 128px;">
+        <div class="icon-size">icon-128x128.png</div>
+        <div class="icon-dimensions">128 × 128 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 144x144" style="max-width: 144px;">
+        <div class="icon-size">icon-144x144.png</div>
+        <div class="icon-dimensions">144 × 144 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 152x152" style="max-width: 152px;">
+        <div class="icon-size">icon-152x152.png</div>
+        <div class="icon-dimensions">152 × 152 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 192x192" style="max-width: 192px;">
+        <div class="icon-size">icon-192x192.png</div>
+        <div class="icon-dimensions">192 × 192 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 384x384" style="max-width: 200px;">
+        <div class="icon-size">icon-384x384.png</div>
+        <div class="icon-dimensions">384 × 384 pixels</div>
+      </div>
+      
+      <div class="icon-card">
+        <img src="/icons/icon.svg" alt="Icon 512x512" style="max-width: 200px;">
+        <div class="icon-size">icon-512x512.png</div>
+        <div class="icon-dimensions">512 × 512 pixels</div>
+      </div>
+    </div>
+    
+    <div class="instructions">
+      <h2>📝 Como gerar os PNGs</h2>
+      <p>O ícone foi criado em formato SVG (vetorial) para manter a máxima qualidade. Para gerar os arquivos PNG:</p>
+      
+      <h3>Opção 1: Usando o script (recomendado)</h3>
+      <p>Instale a biblioteca Sharp e execute o script:</p>
+      <pre>npm install sharp --save-dev
+node scripts/generate-icons-sharp.js</pre>
+      
+      <h3>Opção 2: Conversão manual online</h3>
+      <p>Use um conversor online como <code>convertio.co/svg-png</code> e faça download do SVG em cada tamanho necessário:
+72, 96, 128, 144, 152, 192, 384, 512 pixels.</p>
+      
+      <h3>Opção 3: Usando LibreSVG</h3>
+      <pre>brew install librsvg
+node scripts/generate-icons.js</pre>
+    </div>
+  </div>
+</body>
+</html>
