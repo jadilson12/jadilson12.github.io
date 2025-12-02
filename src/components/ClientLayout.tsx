@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import ScrollToTop from './ScrollToTop';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -36,7 +37,12 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <ScrollToTop />
+    </>
+  );
 };
 
 export default ClientLayout;

@@ -245,6 +245,21 @@
   .perspective-card:hover > * {
     transform: rotateY(5deg) rotateX(5deg);
   }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -252,11 +267,8 @@ body {
   color: var(--color-dark-50);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Mobile optimizations */

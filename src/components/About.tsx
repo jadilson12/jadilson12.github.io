@@ -54,7 +54,7 @@ const About: React.FC = () => {
   };
 
   return (
-    <section id="about" className="section relative overflow-hidden">
+    <section id="about" className="section relative overflow-hidden pt-20 sm:pt-24 md:pt-12">
       {/* Background elements */}
       <div className="absolute inset-0 bg-dots-pattern opacity-10" />
 
@@ -64,14 +64,14 @@ const About: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 gap-12 items-start"
+          className="grid md:grid-cols-2 gap-8 md:gap-12 items-start"
         >
           {/* Left side - Image */}
-          <motion.div variants={imageVariants} className="relative">
-            <div className="relative z-10">
+          <motion.div variants={imageVariants} className="relative px-4 md:px-0">
+            <div className="relative z-10 max-w-md mx-auto md:max-w-none">
               {/* Profile image */}
               <motion.div
-                className="relative aspect-square rounded-2xl overflow-hidden bg-dark-800 border-4 border-dark-700 shadow-2xl"
+                className="relative aspect-square rounded-2xl overflow-hidden bg-dark-800 border-2 md:border-4 border-dark-700 shadow-2xl"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
@@ -81,14 +81,14 @@ const About: React.FC = () => {
                   fill
                   className="object-cover"
                   priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 90vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-900/50 to-transparent" />
               </motion.div>
 
-              {/* Decorative elements - web effect */}
+              {/* Decorative elements - web effect - hidden on mobile */}
               <motion.div
-                className="absolute -top-6 -right-6 w-24 h-24 bg-primary-300/20 rounded-full blur-2xl"
+                className="hidden md:block absolute -top-6 -right-6 w-24 h-24 bg-primary-300/20 rounded-full blur-2xl"
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{
                   scale: [0, 1.2, 1],
@@ -103,7 +103,7 @@ const About: React.FC = () => {
                 }}
               />
               <motion.div
-                className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl"
+                className="hidden md:block absolute -bottom-6 -left-6 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl"
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{
                   scale: [0, 1, 1.2],
@@ -118,9 +118,9 @@ const About: React.FC = () => {
                 }}
               />
 
-              {/* Web connection lines */}
+              {/* Web connection lines - hidden on mobile */}
               <motion.div
-                className="absolute top-1/2 -right-8 w-16 h-0.5 bg-gradient-to-r from-primary-300/50 to-transparent"
+                className="hidden md:block absolute top-1/2 -right-8 w-16 h-0.5 bg-gradient-to-r from-primary-300/50 to-transparent"
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 64, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -129,8 +129,8 @@ const About: React.FC = () => {
           </motion.div>
 
           {/* Right side - Content */}
-          <motion.div variants={textContainerVariants} className="space-y-6">
-            <div className="space-y-4 text-dark-300 leading-relaxed">
+          <motion.div variants={textContainerVariants} className="space-y-4 md:space-y-6 px-4 md:px-0">
+            <div className="space-y-3 md:space-y-4 text-sm md:text-base text-dark-300 leading-relaxed">
               <motion.p variants={paragraphVariants}>
                 Engenheiro de Software com{' '}
                 <strong className="text-primary-300">8+ anos</strong> altamente
@@ -191,11 +191,11 @@ const About: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.6 }}
-              className="mt-8 text-center"
+              className="mt-6 md:mt-8 text-center"
             >
               <motion.a
                 href="/blog"
-                className="btn btn-primary"
+                className="btn btn-primary w-full sm:w-auto"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

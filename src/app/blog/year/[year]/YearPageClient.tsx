@@ -1,5 +1,6 @@
 'use client';
 
+import Breadcrumb from '@/components/Breadcrumb';
 import type { PostData } from '@/lib/posts';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -26,6 +27,15 @@ const YearPageClient: React.FC<YearPageClientProps> = ({
   return (
     <div className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
       <div className="container-custom max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog', href: '/blog' },
+            { label: year },
+          ]}
+        />
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -33,16 +43,6 @@ const YearPageClient: React.FC<YearPageClientProps> = ({
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-primary-300 hover:text-primary-200 transition-colors duration-200 mb-6"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Voltar para o blog
-          </Link>
-
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             {year}
             <span className="text-primary-300"> #</span>

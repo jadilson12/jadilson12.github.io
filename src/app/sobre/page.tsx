@@ -13,9 +13,7 @@ export default function SobrePage() {
   return (
     <Layout>
       <Header />
-      <div className="pt-20">
-        <About />
-      </div>
+      <About />
       <Footer />
     </Layout>
   );
