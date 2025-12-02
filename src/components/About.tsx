@@ -54,7 +54,7 @@ const About: React.FC = () => {
   };
 
   return (
-    <section id="about" className="section relative overflow-hidden pt-20 sm:pt-24 md:pt-12">
+    <section id="sobre" className="section relative overflow-hidden pt-20 sm:pt-24 md:pt-12">
       {/* Background elements */}
       <div className="absolute inset-0 bg-dots-pattern opacity-10" />
 

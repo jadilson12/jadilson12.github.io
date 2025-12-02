@@ -102,12 +102,13 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => 
                   <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-3 md:mb-4">Tags</h3>
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
-                      <span
+                      <Link
                         key={tag}
-                        className="px-4 py-2 text-sm bg-dark-800 text-primary-300 rounded-full border border-primary-300/20 hover:bg-dark-700 transition-colors duration-200"
+                        href={`/blog?tag=${encodeURIComponent(tag)}`}
+                        className="px-4 py-2 text-sm bg-dark-800 text-primary-300 rounded-full border border-primary-300/20 hover:bg-dark-700 hover:border-primary-300/40 transition-colors duration-200 cursor-pointer inline-block"
                       >
                         #{tag}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 </motion.div>

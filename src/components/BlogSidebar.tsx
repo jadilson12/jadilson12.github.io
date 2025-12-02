@@ -17,7 +17,7 @@ interface DateGroup {
   year: string;
   months: {
     [key: string]: {
-      days: Set<string>;
+      posts: PostData[];
       count: number;
     };
   };
@@ -41,18 +41,24 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
       const date = new Date(post.date);
       const year = date.getFullYear().toString();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
 
       if (!groups[year]) {
         groups[year] = { year, months: {} };
       }
 
       if (!groups[year].months[month]) {
-        groups[year].months[month] = { days: new Set(), count: 0 };
+        groups[year].months[month] = { posts: [], count: 0 };
       }
 
-      groups[year].months[month].days.add(day);
+      groups[year].months[month].posts.push(post);
       groups[year].months[month].count++;
+    });
+
+    // Sort posts within each month by date (most recent first)
+    Object.values(groups).forEach(yearGroup => {
+      Object.values(yearGroup.months).forEach(monthData => {
+        monthData.posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      });
     });
 
     return Object.values(groups).sort((a, b) => b.year.localeCompare(a.year));
@@ -202,37 +208,40 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
                               </div>
                             </button>
 
-                            {/* Days */}
+                            {/* Posts */}
                             {isMonthExpanded && (
                               <motion.div
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="ml-3 flex flex-wrap gap-1"
+                                className="ml-3 space-y-1"
                               >
-                                {Array.from(data.days)
-                                  .sort((a, b) => b.localeCompare(a))
-                                  .map((day) => {
-                                    const dateKey = `${yearGroup.year}-${month}-${day}`;
-                                    const isSelected = selectedDate === dateKey;
+                                {data.posts.map((post) => {
+                                  const postDate = new Date(post.date);
+                                  const day = postDate.getDate().toString().padStart(2, '0');
+                                  const dateKey = `${yearGroup.year}-${month}-${day}`;
+                                  const isSelected = selectedDate === dateKey;
 
-                                    return (
-                                      <button
-                                        key={day}
-                                        onClick={() => onDateClick(dateKey)}
-                                        className={`
-                                          px-2 py-1 text-xs rounded transition-all duration-200
-                                          ${isSelected
-                                            ? 'bg-primary-300 text-dark-950 font-semibold'
-                                            : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
-                                          }
-                                        `}
-                                      >
-                                        {day}
-                                      </button>
-                                    );
-                                  })}
+                                  return (
+                                    <Link
+                                      key={post.id}
+                                      href={`/blog/${post.slug}`}
+                                      className={`
+                                        block px-3 py-2 text-xs rounded-lg transition-all duration-200
+                                        ${isSelected
+                                          ? 'bg-primary-300 text-dark-950 font-medium'
+                                          : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
+                                        }
+                                      `}
+                                    >
+                                      <div className="flex items-start gap-2">
+                                        <span className="text-[10px] opacity-60 shrink-0 mt-0.5">{day}</span>
+                                        <span className="flex-1 line-clamp-2">{post.title}</span>
+                                      </div>
+                                    </Link>
+                                  );
+                                })}
                               </motion.div>
                             )}
                           </div>

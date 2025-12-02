@@ -255,11 +255,69 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Scroll snap for home page */
+  .home-page-snap {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overscroll-behavior-y: contain; /* Prevent overscroll bounce */
+  }
+
+  .snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    height: 100vh; /* Fallback */
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* Fallback for browsers that don't support dvh */
+  @supports not (height: 100dvh) {
+    .snap-section {
+      height: 100vh;
+      min-height: 100vh;
+    }
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .home-page-snap {
+      scroll-snap-type: y proximity; /* Less strict snapping on mobile */
+    }
+
+    .snap-section {
+      scroll-snap-align: start;
+      scroll-snap-stop: normal; /* Allow skipping sections on fast scroll */
+    }
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .home-page-snap {
+      scroll-snap-type: y proximity;
+    }
+  }
+
+  /* Mobile landscape - disable snap for better UX */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .home-page-snap {
+      scroll-snap-type: none;
+    }
+
+    .snap-section {
+      min-height: 100vh;
+      height: auto;
+    }
+  }
 }
 
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  position: relative;
 }
 
 body {
@@ -269,7 +327,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   width: 100%;
+  position: relative;
 }
+
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
@@ -294,6 +354,25 @@ body {
   textarea,
   select {
     min-height: 44px;
+  }
+
+  /* Prevent pull-to-refresh on mobile */
+  body {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Improve scroll performance */
+  .home-page-snap {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Ensure fixed header works on mobile */
+  header {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
   }
 }
 
