@@ -71,7 +71,7 @@ const Hero: React.FC = () => {
             delay={0.8}
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
           >
-            Engenheiro de Software apaixonado por criar experiências digitais incríveis com tecnologias modernas
+            Engenheiro de Software | Do planejamento à implantação | On-Premise · Cloud · Integração com IA
           </AnimatedWords>
 
           <motion.div
@@ -94,14 +94,14 @@ const Hero: React.FC = () => {
                 />
               </motion.div>
             </Link>
-            <Link href="https://github.com/jadilson12" className="relative group w-full sm:w-auto" target="_blank" rel="noopener noreferrer">
+            <Link href="/blog" className="relative group w-full sm:w-auto">
               <motion.div
                 className="btn btn-secondary backdrop-blur-sm relative overflow-hidden w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center"
                 whileHover={{ scale: 1.05, borderColor: 'rgba(201, 243, 29, 0.6)' }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
-                <span className="relative z-10">Entre em Contato</span>
+                <span className="relative z-10">Ver Blog</span>
               </motion.div>
             </Link>
           </motion.div>

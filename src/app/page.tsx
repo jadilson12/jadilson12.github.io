@@ -13,19 +13,19 @@ const Footer = dynamic(() => import('@/components/Footer'), {
 });
 
 export const metadata: Metadata = {
-  title: 'Jadilson Guedes - Engenheiro de Software',
-  description: 'Portfólio de Jadilson Guedes, Engenheiro de Software apaixonado por criar experiências digitais com tecnologias modernas',
-  keywords: ['desenvolvedor', 'software engineer', 'react', 'typescript', 'nodejs', 'javascript'],
+  title: 'Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps',
+  description: 'Engenheiro de Software com 8+ anos desenvolvendo soluções completas do planejamento à implantação. Especialista em on-premise, cloud e integração com IA.',
+  keywords: ['engenheiro de software', 'desenvolvedor', 'inteligência artificial', 'kubernetes', 'devops', 'azure', 'nodejs', 'java', 'python'],
 };
 
 export default function Home() {
   return (
     <Layout>
       {/* React 19: Native document metadata support */}
-      <title>Jadilson Guedes - Engenheiro de Software</title>
-      <meta name="description" content="Portfólio de Jadilson Guedes, Engenheiro de Software apaixonado por criar experiências digitais com tecnologias modernas" />
+      <title>Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps</title>
+      <meta name="description" content="Engenheiro de Software com 8+ anos desenvolvendo soluções completas do planejamento à implantação. Especialista em on-premise, cloud e integração com IA." />
       <meta property="og:title" content="Jadilson Guedes - Engenheiro de Software" />
-      <meta property="og:description" content="Portfólio de Jadilson Guedes, Engenheiro de Software" />
+      <meta property="og:description" content="Do planejamento à implantação | On-Premise, Cloud e IA" />
 
       <Header />
       <Hero />

@@ -15,9 +15,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jadilson Guedes - Engenheiro de Software",
-  description: "Portfólio de Jadilson Guedes, Engenheiro de Software especializado em desenvolvimento web moderno com React, TypeScript e Node.js",
-  keywords: ['desenvolvedor', 'software engineer', 'react', 'typescript', 'nodejs', 'javascript', 'web development'],
+  title: "Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps",
+  description: "Engenheiro de Software com 8+ anos desenvolvendo soluções completas do planejamento à implantação. Especialista em on-premise, cloud e integração com IA.",
+  keywords: [
+    'engenheiro de software',
+    'software engineer',
+    'desenvolvedor full stack',
+    'on-premise',
+    'cloud computing',
+    'inteligência artificial',
+    'kubernetes',
+    'azure',
+    'devops',
+    'nodejs',
+    'java',
+    'python',
+    'react',
+    'typescript',
+    'microserviços',
+    'ci/cd',
+    'chatbots',
+    'government technology',
+    'govtech',
+  ],
   authors: [{ name: 'Jadilson Guedes' }],
   creator: 'Jadilson Guedes',
   manifest: '/manifest.json',
@@ -32,14 +52,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    title: 'Jadilson Guedes - Engenheiro de Software',
-    description: 'Portfólio de Jadilson Guedes, Engenheiro de Software',
+    title: 'Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps',
+    description: 'Engenheiro de Software com 8+ anos desenvolvendo soluções do planejamento à implantação. On-premise, cloud e integração com IA.',
     siteName: 'Jadilson Guedes',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Jadilson Guedes - Engenheiro de Software',
-    description: 'Portfólio de Jadilson Guedes',
+    description: 'Do planejamento à implantação | On-Premise, Cloud e IA',
   },
 };
 
