@@ -40,7 +40,7 @@ const About: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 gap-12 items-center"
+          className="grid md:grid-cols-2 gap-12 items-start"
         >
           {/* Left side - Image */}
           <motion.div variants={itemVariants} className="relative">
@@ -92,55 +92,74 @@ const About: React.FC = () => {
 
           {/* Right side - Content */}
           <div className="space-y-6">
-            <motion.div variants={itemVariants}>
-              <span className="inline-block px-4 py-2 mb-4 text-sm font-medium text-primary-300 bg-primary-300/10 rounded-full border border-primary-300/20">
-                Sobre Mim
-              </span>
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-                Transformando Ideias em{' '}
-                <span className="text-gradient-primary">Realidade</span>
-              </h2>
+            <motion.div
+              variants={itemVariants}
+              className="space-y-4 text-dark-300 leading-relaxed"
+            >
+              <p>
+                Engenheiro de Software com{' '}
+                <strong className="text-primary-300">8+ anos</strong> altamente
+                qualificado, com uma Pós-graduação em Arquitetura de Full Cycle.
+                Possuo um conhecimento aprofundado em diversas linguagens e
+                ecossistemas de backend, incluindo proficiência em tecnologias
+                estabelecidas como{' '}
+                <strong className="text-dark-200">Java</strong> (com frameworks
+                avançados como Spring, Hibernate e JPA) e ampla experiência com
+                o ecossistema <strong className="text-dark-200">Node.js</strong>{' '}
+                (com proficiência em NestJS e TypeORM). Minha expertise inclui
+                também o desenvolvimento de aplicações que utilizam frameworks
+                de LLMs como{' '}
+                <strong className="text-dark-200">LangChain</strong>, para a
+                criação de sistemas de IA mais complexos e contextuais.
+              </p>
+
+              <p>
+                Com expertise consolidada, focada na criação de soluções de
+                backend robustas, pautadas em padrões de microsserviços. Minha
+                proficiência se estende ao desenvolvimento frontend, onde
+                utilizo tecnologias modernas como{' '}
+                <strong className="text-dark-200">Angular</strong>,{' '}
+                <strong className="text-dark-200">React</strong> e{' '}
+                <strong className="text-dark-200">Next.js</strong>.
+                Adicionalmente, possuo amplas habilidades na construção e
+                otimização de pipelines de{' '}
+                <strong className="text-dark-200">CI/CD</strong>, com domínio de
+                ferramentas como GitLab e Github.
+              </p>
+
+              <p>
+                Minhas competências técnicas incluem a implementação e o
+                gerenciamento de aplicações containerizadas utilizando{' '}
+                <strong className="text-dark-200">Docker</strong>, bem como a
+                orquestração de sistemas escaláveis com{' '}
+                <strong className="text-dark-200">Kubernetes</strong> e{' '}
+                <strong className="text-dark-200">Helm</strong>. Isso assegura
+                deployments facilitados e escalabilidade eficiente. Adoto a
+                metodologia de desenvolvimento ágil e tenho um compromisso
+                sólido com a qualidade do código, implementando rigorosamente
+                testes unitários e de integração com ferramentas como JUnit,
+                Mockito e Jest, fundamentais para a confiabilidade do software.
+              </p>
+
+              <p>
+                Sou um profissional proativo e dedicado, busco a excelência na
+                aplicação das melhores práticas da indústria. Tenho um foco
+                contínuo no aprimoramento de novas tecnologias e metodologias.
+                Minha experiência em diversas tecnologias, aliada à capacidade
+                de atuar de forma colaborativa em equipes multidisciplinares, me
+                torna um membro de grande valor para qualquer time de
+                desenvolvimento de software.
+              </p>
             </motion.div>
 
-            <motion.p variants={itemVariants} className="text-lg text-dark-300 leading-relaxed">
-              Sou um engenheiro de software apaixonado por Sistemas de Informação, com foco em criar
-              experiências digitais excepcionais. Trabalho com uma ampla gama de tecnologias modernas
-              e estou sempre aberto a aprender novas ferramentas e ajudar a comunidade com questões técnicas.
-            </motion.p>
-
-            <motion.p variants={itemVariants} className="text-lg text-dark-300 leading-relaxed">
-              Minha jornada na tecnologia me levou a dominar tecnologias como React, TypeScript,
-              NestJS, AdonisJS, Python e PostgreSQL. Com mais de 100 repositórios públicos no GitHub,
-              contribuo ativamente para a comunidade open-source e compartilho conhecimento.
-            </motion.p>
-
-            <motion.div variants={itemVariants} className="grid grid-cols-2 gap-6 pt-4">
-              {[
-                { label: 'Repositórios', value: '101' },
-                { label: 'Seguidores', value: '147' },
-                { label: 'Projetos Open Source', value: '50+' },
-                { label: 'Tecnologias', value: '10+' },
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  className="card p-6 text-center"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="text-3xl font-bold text-primary-300 mb-2">{stat.value}</div>
-                  <div className="text-sm text-dark-400">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="pt-4">
+            <motion.div variants={itemVariants} className="mt-8 text-center">
               <motion.a
-                href="#contato"
+                href="/blog"
                 className="btn btn-primary"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Vamos Trabalhar Juntos
+                Ver Blog
               </motion.a>
             </motion.div>
           </div>
