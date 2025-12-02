@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import Layout from '@/components/Layout';
 import { getSortedPostsData } from '@/lib/posts';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import BlogPageClient from './BlogPageClient';
 
 export const metadata: Metadata = {
@@ -21,7 +22,9 @@ export default function BlogPage() {
       <meta property="og:description" content="Artigos sobre desenvolvimento web, programação e tecnologia" />
 
       <Header />
-      <BlogPageClient posts={posts} />
+      <Suspense fallback={<div className="min-h-screen pt-32 pb-20 flex items-center justify-center"><div className="text-dark-400">Carregando...</div></div>}>
+        <BlogPageClient posts={posts} />
+      </Suspense>
     </Layout>
   );
 }

@@ -30,7 +30,10 @@ export function useScrollSpy(sectionIds: string[], offset: number = 100) {
 
     handleScroll(); // Call once on mount
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [sectionIds, offset]);
 
   return activeSection;

@@ -16,13 +16,14 @@ const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const activeSection = useScrollSpy(['home', 'contato'], 150);
+  const activeSection = useScrollSpy(['home', 'sobre', 'contato'], 150);
 
   // Detectar se está em uma página de post individual
   const isPostPage = pathname.startsWith('/blog/') && pathname !== '/blog' && !pathname.startsWith('/blog/year/');
 
   useEffect(() => {
     const handleScroll = () => {
+      // Usar window.scrollY diretamente
       setScrolled(window.scrollY > 20);
     };
 
@@ -40,7 +41,7 @@ const Header: React.FC = () => {
 
   const navItems: NavItem[] = [
     { name: 'Início', href: '/', sectionId: 'home' },
-    { name: 'Sobre', href: '/sobre' },
+    { name: 'Sobre', href: '/sobre', sectionId: 'sobre' },
     { name: 'Blog', href: '/blog' },
     { name: 'Contato', href: '/contato', sectionId: 'contato' },
   ];
@@ -65,8 +66,9 @@ const Header: React.FC = () => {
     if (pathname === '/' && item.sectionId) {
       e.preventDefault();
       const element = document.getElementById(item.sectionId);
+
       if (element) {
-        const headerOffset = 80;
+        const headerOffset = 0; // Com scroll-snap não precisamos de offset
         const elementPosition = element.offsetTop;
         const offsetPosition = elementPosition - headerOffset;
 
@@ -88,7 +90,7 @@ const Header: React.FC = () => {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-          ? 'bg-dark-900/80 backdrop-blur-lg'
+          ? 'bg-dark-900/95 backdrop-blur-xl shadow-lg shadow-dark-950/50 border-b border-dark-800/50'
           : 'bg-transparent'
           }`}
       >

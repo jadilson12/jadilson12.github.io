@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
     <section
       ref={heroRef}
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24 md:pt-0"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-0"
     >
       {/* Background pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20" />
@@ -61,28 +61,28 @@ const Hero: React.FC = () => {
         animate="visible"
         style={{ opacity }}
       >
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold mb-4 md:mb-6 leading-tight">
+        <div className="max-w-4xl mx-auto text-center px-4 py-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold mb-3 md:mb-6 leading-tight">
             Olá, eu sou <GradientText animate={true}>Jadilson Guedes</GradientText>
           </h1>
 
           <motion.p
             variants={itemVariants}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-3 md:mb-6 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-2 md:mb-6 max-w-3xl mx-auto leading-relaxed"
           >
             Engenheiro de Software com <span className="text-primary-300 font-semibold">8+ anos</span> de experiência
           </motion.p>
 
           <motion.p
             variants={itemVariants}
-            className="text-sm sm:text-base md:text-lg text-dark-400 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-dark-400 mb-4 md:mb-8 max-w-2xl mx-auto leading-relaxed"
           >
             Arquitetando e desenvolvendo <span className="text-primary-300">soluções robustas e escaláveis</span> do código à produção
           </motion.p>
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 md:gap-4 mb-8 md:mb-12 max-w-md sm:max-w-none mx-auto"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 md:gap-4 mb-4 md:mb-12 max-w-md sm:max-w-none mx-auto"
           >
             <Link href="/sobre" className="relative group w-full sm:w-auto">
               <motion.div
@@ -115,57 +115,57 @@ const Hero: React.FC = () => {
           {/* Key Highlights */}
           <motion.div
             variants={itemVariants}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 max-w-6xl mx-auto"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6 max-w-6xl mx-auto"
           >
             <motion.div
-              className="card p-4 md:p-6 text-center"
+              className="card p-3 md:p-6 text-center"
               whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
               transition={{ duration: 0.2 }}
             >
-              <div className="text-primary-300 text-xl md:text-3xl font-bold mb-1 md:mb-2">
+              <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 Frontend
               </div>
-              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
-                Interfaces visuais inovadoras com experiências imersivas e responsivas
+              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+                Interfaces visuais inovadoras com experiências imersivas
               </p>
             </motion.div>
 
             <motion.div
-              className="card p-4 md:p-6 text-center"
+              className="card p-3 md:p-6 text-center"
               whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
               transition={{ duration: 0.2 }}
             >
-              <div className="text-primary-300 text-xl md:text-3xl font-bold mb-1 md:mb-2">
+              <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 Serviços
               </div>
-              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
-                Arquiteturas distribuídas escaláveis com padrões de design robustos
+              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+                Arquiteturas distribuídas escaláveis com design robusto
               </p>
             </motion.div>
 
             <motion.div
-              className="card p-4 md:p-6 text-center"
+              className="card p-3 md:p-6 text-center"
               whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
               transition={{ duration: 0.2 }}
             >
-              <div className="text-primary-300 text-xl md:text-3xl font-bold mb-1 md:mb-2">
-                Integração IA
+              <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
+                IA
               </div>
-              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
-                Sistemas inteligentes contextuais que transformam dados em decisões
+              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+                Sistemas inteligentes que transformam dados em decisões
               </p>
             </motion.div>
 
             <motion.div
-              className="card p-4 md:p-6 text-center"
+              className="card p-3 md:p-6 text-center"
               whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
               transition={{ duration: 0.2 }}
             >
-              <div className="text-primary-300 text-xl md:text-3xl font-bold mb-1 md:mb-2">
+              <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 DevOps
               </div>
-              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
-                Automação de deploy, containerização e orquestração para entregas ágeis
+              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+                Automação de deploy e orquestração para entregas ágeis
               </p>
             </motion.div>
           </motion.div>
@@ -174,7 +174,7 @@ const Hero: React.FC = () => {
 
       {/* Scroll indicator with premium styling */}
       <motion.div
-        className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:flex"
+        className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 hidden md:flex"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 0.8 }}

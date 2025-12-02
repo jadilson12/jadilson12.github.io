@@ -5,7 +5,10 @@ import Layout from '@/components/Layout';
 import type { Metadata } from 'next';
 
 // Lazy load non-critical components for better performance
-const Contact = dynamic(() => import('@/components/Contact'), {
+const About = dynamic(() => import('@/components/About'), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const ContatoPageClient = dynamic(() => import('@/app/contato/ContatoPageClient'), {
   loading: () => <div className="min-h-[400px]" />,
 });
 const Footer = dynamic(() => import('@/components/Footer'), {
@@ -29,7 +32,8 @@ export default function Home() {
 
       <Header />
       <Hero />
-      <Contact />
+      <About />
+      <ContatoPageClient />
       <Footer />
     </Layout>
   );
