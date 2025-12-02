@@ -66,13 +66,19 @@ const Hero: React.FC = () => {
             Olá, eu sou <GradientText animate={true}>Jadilson Guedes</GradientText>
           </h1>
 
-          <AnimatedWords
-            as="p"
-            delay={0.8}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
+          <motion.p
+            variants={itemVariants}
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-4 md:mb-6 max-w-3xl mx-auto leading-relaxed px-4"
           >
-            Engenheiro de Software | Do planejamento à implantação | On-Premise · Cloud · Integração com IA
-          </AnimatedWords>
+            Engenheiro de Software com <span className="text-primary-300 font-semibold">8+ anos</span> de experiência
+          </motion.p>
+
+          <motion.p
+            variants={itemVariants}
+            className="text-sm sm:text-base md:text-lg text-dark-400 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
+          >
+            Arquitetando e desenvolvendo <span className="text-primary-300">soluções robustas e escaláveis</span> do código à produção
+          </motion.p>
 
           <motion.div
             variants={itemVariants}
@@ -85,7 +91,7 @@ const Hero: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
-                <span className="relative z-10">Conheça Meu Trabalho</span>
+                <span className="relative z-10">Saiba Mais Sobre Mim</span>
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-300"
                   initial={{ x: '-100%' }}
@@ -104,6 +110,64 @@ const Hero: React.FC = () => {
                 <span className="relative z-10">Ver Blog</span>
               </motion.div>
             </Link>
+          </motion.div>
+
+          {/* Key Highlights */}
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto px-4"
+          >
+            <motion.div
+              className="card p-4 md:p-6 text-center"
+              whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="text-primary-300 text-2xl md:text-3xl font-bold mb-2">
+                Frontend
+              </div>
+              <p className="text-dark-400 text-sm">
+                Interfaces visuais inovadoras com experiências imersivas e responsivas
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="card p-4 md:p-6 text-center"
+              whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="text-primary-300 text-2xl md:text-3xl font-bold mb-2">
+                Serviços
+              </div>
+              <p className="text-dark-400 text-sm">
+                Arquiteturas distribuídas escaláveis com padrões de design robustos
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="card p-4 md:p-6 text-center"
+              whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="text-primary-300 text-2xl md:text-3xl font-bold mb-2">
+                Integração IA
+              </div>
+              <p className="text-dark-400 text-sm">
+                Sistemas inteligentes contextuais que transformam dados em decisões
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="card p-4 md:p-6 text-center"
+              whileHover={{ y: -4, borderColor: 'rgba(201, 243, 29, 0.3)' }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="text-primary-300 text-2xl md:text-3xl font-bold mb-2">
+                DevOps
+              </div>
+              <p className="text-dark-400 text-sm">
+                Automação de deploy, containerização e orquestração para entregas ágeis
+              </p>
+            </motion.div>
           </motion.div>
         </div>
       </motion.div>

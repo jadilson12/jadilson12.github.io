@@ -12,19 +12,43 @@ const About: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.3,
       },
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+  const imageVariants = {
+    hidden: { opacity: 0, x: -100, scale: 0.8 },
     visible: {
       opacity: 1,
-      y: 0,
+      x: 0,
+      scale: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.8,
         ease: 'easeOut' as const,
+      },
+    },
+  };
+
+  const textContainerVariants = {
+    hidden: { opacity: 0, x: 100 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: 'easeOut' as const,
+        staggerChildren: 0.4,
+      },
+    },
+  };
+
+  const paragraphVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 1.5,
       },
     },
   };
@@ -43,7 +67,7 @@ const About: React.FC = () => {
           className="grid md:grid-cols-2 gap-12 items-start"
         >
           {/* Left side - Image */}
-          <motion.div variants={itemVariants} className="relative">
+          <motion.div variants={imageVariants} className="relative">
             <div className="relative z-10">
               {/* Profile image */}
               <motion.div
@@ -62,41 +86,52 @@ const About: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-900/50 to-transparent" />
               </motion.div>
 
-              {/* Decorative elements */}
+              {/* Decorative elements - web effect */}
               <motion.div
                 className="absolute -top-6 -right-6 w-24 h-24 bg-primary-300/20 rounded-full blur-2xl"
+                initial={{ scale: 0, opacity: 0 }}
                 animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.5, 0.3],
+                  scale: [0, 1.2, 1],
+                  opacity: [0, 0.5, 0.3],
                 }}
                 transition={{
-                  duration: 4,
+                  duration: 1.5,
+                  delay: 0.8,
                   repeat: Infinity,
+                  repeatDelay: 2,
                   ease: 'easeInOut' as const,
                 }}
               />
               <motion.div
                 className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl"
+                initial={{ scale: 0, opacity: 0 }}
                 animate={{
-                  scale: [1.2, 1, 1.2],
-                  opacity: [0.5, 0.3, 0.5],
+                  scale: [0, 1, 1.2],
+                  opacity: [0, 0.3, 0.5],
                 }}
                 transition={{
-                  duration: 4,
+                  duration: 1.5,
+                  delay: 1,
                   repeat: Infinity,
+                  repeatDelay: 2,
                   ease: 'easeInOut' as const,
                 }}
+              />
+
+              {/* Web connection lines */}
+              <motion.div
+                className="absolute top-1/2 -right-8 w-16 h-0.5 bg-gradient-to-r from-primary-300/50 to-transparent"
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 64, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
               />
             </div>
           </motion.div>
 
           {/* Right side - Content */}
-          <div className="space-y-6">
-            <motion.div
-              variants={itemVariants}
-              className="space-y-4 text-dark-300 leading-relaxed"
-            >
-              <p>
+          <motion.div variants={textContainerVariants} className="space-y-6">
+            <div className="space-y-4 text-dark-300 leading-relaxed">
+              <motion.p variants={paragraphVariants}>
                 Engenheiro de Software com{' '}
                 <strong className="text-primary-300">8+ anos</strong> altamente
                 qualificado, com uma Pós-graduação em Arquitetura de Full Cycle.
@@ -111,9 +146,9 @@ const About: React.FC = () => {
                 de LLMs como{' '}
                 <strong className="text-dark-200">LangChain</strong>, para a
                 criação de sistemas de IA mais complexos e contextuais.
-              </p>
+              </motion.p>
 
-              <p>
+              <motion.p variants={paragraphVariants}>
                 Com expertise consolidada, focada na criação de soluções de
                 backend robustas, pautadas em padrões de microsserviços. Minha
                 proficiência se estende ao desenvolvimento frontend, onde
@@ -125,9 +160,9 @@ const About: React.FC = () => {
                 otimização de pipelines de{' '}
                 <strong className="text-dark-200">CI/CD</strong>, com domínio de
                 ferramentas como GitLab e Github.
-              </p>
+              </motion.p>
 
-              <p>
+              <motion.p variants={paragraphVariants}>
                 Minhas competências técnicas incluem a implementação e o
                 gerenciamento de aplicações containerizadas utilizando{' '}
                 <strong className="text-dark-200">Docker</strong>, bem como a
@@ -139,9 +174,9 @@ const About: React.FC = () => {
                 sólido com a qualidade do código, implementando rigorosamente
                 testes unitários e de integração com ferramentas como JUnit,
                 Mockito e Jest, fundamentais para a confiabilidade do software.
-              </p>
+              </motion.p>
 
-              <p>
+              <motion.p variants={paragraphVariants}>
                 Sou um profissional proativo e dedicado, busco a excelência na
                 aplicação das melhores práticas da indústria. Tenho um foco
                 contínuo no aprimoramento de novas tecnologias e metodologias.
@@ -149,10 +184,15 @@ const About: React.FC = () => {
                 de atuar de forma colaborativa em equipes multidisciplinares, me
                 torna um membro de grande valor para qualquer time de
                 desenvolvimento de software.
-              </p>
-            </motion.div>
+              </motion.p>
+            </div>
 
-            <motion.div variants={itemVariants} className="mt-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.6 }}
+              className="mt-8 text-center"
+            >
               <motion.a
                 href="/blog"
                 className="btn btn-primary"
@@ -162,7 +202,7 @@ const About: React.FC = () => {
                 Ver Blog
               </motion.a>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

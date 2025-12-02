@@ -1,6 +1,7 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 interface NavItem {
@@ -12,6 +13,7 @@ interface NavItem {
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,10 +36,17 @@ const Header: React.FC = () => {
     { name: 'Início', href: '/' },
     { name: 'Sobre', href: '/sobre' },
     { name: 'Blog', href: '/blog' },
-    { name: 'Contato', href: 'https://github.com/jadilson12', external: true },
+    { name: 'Contato', href: '/contato' },
   ];
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -66,24 +75,31 @@ const Header: React.FC = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item, index) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="px-4 py-2 text-dark-300 hover:text-white transition-colors duration-200 rounded-lg hover:bg-dark-800"
-                  {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
-                >
-                  <motion.span
-                    className="inline-block"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.4 }}
-                    whileHover={{ y: -2 }}
+              {navItems.map((item, index) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`px-4 py-2 transition-colors duration-200 rounded-lg ${
+                      active
+                        ? 'text-primary-300 bg-dark-800 font-medium'
+                        : 'text-dark-300 hover:text-white hover:bg-dark-800'
+                    }`}
+                    {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                   >
-                    {item.name}
-                  </motion.span>
-                </Link>
-              ))}
+                    <motion.span
+                      className="inline-block"
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      whileHover={{ y: -2 }}
+                    >
+                      {item.name}
+                    </motion.span>
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Mobile Menu Button */}
@@ -145,23 +161,30 @@ const Header: React.FC = () => {
               <div className="flex flex-col h-full pt-20 px-6 pb-6">
                 {/* Navigation Links */}
                 <nav className="flex-1 space-y-2">
-                  {navItems.map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <Link
-                        href={item.href}
-                        onClick={closeMobileMenu}
-                        className="block px-4 py-4 text-lg text-dark-300 hover:text-white hover:bg-dark-800 rounded-lg transition-colors duration-200"
-                        {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
+                  {navItems.map((item, index) => {
+                    const active = isActive(item.href);
+                    return (
+                      <motion.div
+                        key={item.name}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
                       >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
+                        <Link
+                          href={item.href}
+                          onClick={closeMobileMenu}
+                          className={`block px-4 py-4 text-lg rounded-lg transition-colors duration-200 ${
+                            active
+                              ? 'text-primary-300 bg-dark-800 font-medium'
+                              : 'text-dark-300 hover:text-white hover:bg-dark-800'
+                          }`}
+                          {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
+                        >
+                          {item.name}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
                 </nav>
               </div>
             </motion.div>
