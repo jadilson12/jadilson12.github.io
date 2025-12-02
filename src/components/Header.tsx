@@ -86,20 +86,6 @@ const Header: React.FC = () => {
               ))}
             </div>
 
-            {/* CTA Button */}
-            <Link href="https://github.com/jadilson12" className="hidden md:block" target="_blank" rel="noopener noreferrer">
-              <motion.span
-                className="inline-flex btn btn-primary"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6, duration: 0.4 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Fale Comigo
-              </motion.span>
-            </Link>
-
             {/* Mobile Menu Button */}
             <motion.button
               className="md:hidden p-2 text-dark-300 hover:text-white relative z-50"
@@ -177,23 +163,6 @@ const Header: React.FC = () => {
                     </motion.div>
                   ))}
                 </nav>
-
-                {/* CTA Button */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <Link
-                    href="https://github.com/jadilson12"
-                    onClick={closeMobileMenu}
-                    className="block w-full btn btn-primary text-center py-4"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Fale Comigo
-                  </Link>
-                </motion.div>
               </div>
             </motion.div>
           </>
