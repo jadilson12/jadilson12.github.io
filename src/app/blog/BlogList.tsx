@@ -1,6 +1,7 @@
 'use client';
 
 import BlogSidebar from '@/components/BlogSidebar';
+import Breadcrumb from '@/components/Breadcrumb';
 import type { PostData } from '@/lib/posts';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -103,6 +104,14 @@ const BlogList: React.FC<BlogListProps> = ({
   return (
     <div className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
       <div className="container-custom max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog' },
+          ]}
+        />
+
         {/* Main Layout with Sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Blog Posts - Left Side */}
@@ -289,7 +298,7 @@ const BlogList: React.FC<BlogListProps> = ({
           </div>
 
           {/* Sidebar - Right Side */}
-          <aside className="lg:col-span-4 order-first lg:order-last">
+          <aside className="lg:col-span-4 order-last">
             <div className="lg:sticky lg:top-24">
               <BlogSidebar
                 posts={posts}

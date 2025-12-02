@@ -1,5 +1,8 @@
 'use client';
 
+import Breadcrumb from '@/components/Breadcrumb';
+import FloatingTocButton from '@/components/FloatingTocButton';
+import ShareButtons from '@/components/ShareButtons';
 import TableOfContents from '@/components/TableOfContents';
 import type { PostData } from '@/lib/posts';
 import { motion } from 'framer-motion';
@@ -13,10 +16,20 @@ interface BlogPostContentProps {
 
 const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => {
   return (
-    <article className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 items-start">{/* Sidebar - Table of Contents */}
-          <TableOfContents />
+    <>
+      <article className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          {/* Breadcrumb */}
+          <Breadcrumb
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Blog', href: '/blog' },
+              { label: post.title },
+            ]}
+          />
+
+          <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 items-start">{/* Sidebar - Table of Contents */}
+            <TableOfContents />
 
           {/* Main Content */}
           <div className="flex-1 w-full max-w-4xl xl:mx-auto">{/* Rest of the content */}
@@ -73,7 +86,7 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="prose prose-base md:prose-lg prose-invert max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-white prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-8 md:prose-h2:mt-12 prose-h2:mb-4 md:prose-h2:mb-6 prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mt-6 md:prose-h3:mt-8 prose-h3:mb-3 md:prose-h3:mb-4 prose-p:text-dark-200 prose-p:leading-loose prose-p:mb-4 md:prose-p:mb-6 prose-a:text-primary-300 prose-a:no-underline hover:prose-a:text-primary-400 prose-code:text-primary-300 prose-code:bg-dark-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-pre:bg-dark-800 prose-pre:border prose-pre:border-dark-700 prose-pre:p-3 md:prose-pre:p-4 prose-pre:overflow-x-auto prose-strong:text-white prose-strong:font-semibold prose-ul:text-dark-200 prose-ul:leading-loose prose-ol:text-dark-200 prose-ol:leading-loose prose-li:marker:text-primary-300 prose-li:leading-loose prose-li:mb-2 prose-blockquote:border-l-primary-300 prose-blockquote:text-dark-300 prose-img:rounded-xl"
+                className="prose prose-base md:prose-lg prose-invert max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-white prose-h1:hidden prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-8 md:prose-h2:mt-12 prose-h2:mb-4 md:prose-h2:mb-6 prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mt-6 md:prose-h3:mt-8 prose-h3:mb-3 md:prose-h3:mb-4 prose-p:text-dark-200 prose-p:leading-loose prose-p:mb-4 md:prose-p:mb-6 prose-a:text-primary-300 prose-a:no-underline hover:prose-a:text-primary-400 prose-code:text-primary-300 prose-code:bg-dark-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-pre:bg-dark-800 prose-pre:border prose-pre:border-dark-700 prose-pre:p-3 md:prose-pre:p-4 prose-pre:overflow-x-auto prose-strong:text-white prose-strong:font-semibold prose-ul:text-dark-200 prose-ul:leading-loose prose-ol:text-dark-200 prose-ol:leading-loose prose-li:marker:text-primary-300 prose-li:leading-loose prose-li:mb-2 prose-blockquote:border-l-primary-300 prose-blockquote:text-dark-300 prose-img:rounded-xl"
               >
                 {children}
               </motion.div>
@@ -100,11 +113,18 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => 
                 </motion.div>
               )}
 
+              {/* Share Buttons */}
+              <ShareButtons
+                title={post.title}
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+                description={post.description}
+              />
+
               {/* Back to Blog */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
                 className="mt-10 md:mt-16 pt-8 md:pt-12 border-t border-dark-700"
               >
                 <Link href="/blog" className="inline-flex items-center gap-2 text-primary-300 hover:text-primary-400 transition-colors duration-200">
@@ -123,7 +143,11 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => 
           </div>{/* End Main Content */}
         </div>{/* End flex container */}
       </div>{/* End container */}
-    </article>
+      </article>
+
+      {/* Floating TOC Button for Mobile/Tablet */}
+      <FloatingTocButton />
+    </>
   );
 };
 

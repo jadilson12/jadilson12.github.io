@@ -67,6 +67,9 @@ const TableOfContents: React.FC = () => {
         behavior: 'smooth',
       });
 
+      // Update URL with hash
+      window.history.pushState(null, '', `#${id}`);
+
       // Update active ID manually
       setActiveId(id);
     }
