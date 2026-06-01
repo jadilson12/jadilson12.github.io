@@ -1,0 +1,376 @@
+---
+title: 'Testes unitários no front-end: por que escolho Vitest em julho de 2026'
+date: '2026-07-01T12:00:00-03:00'
+description:
+  'Vantagens e desvantagens de Vitest, Jest, Mocha e node:test para testes
+  unitários no front-end, com os critérios da minha escolha e um exemplo em
+  TypeScript.'
+tags: ['frontend', 'testes-unitarios', 'vitest', 'typescript', 'qualidade']
+---
+
+Imagine uma pequena alteração no carrinho de uma loja: permitir que o usuário
+escolha a quantidade de um produto. A função que calcula o subtotal parece
+simples, a tela continua abrindo e o TypeScript compila sem reclamar. Durante a
+revisão, porém, alguém percebe que uma quantidade negativa produz um subtotal
+negativo. Faltava definir e proteger uma regra: quais quantidades são válidas?
+
+Um teste unitário transforma essa decisão em uma verificação que pode ser
+repetida a cada mudança. Para três itens de R$ 19,90, o subtotal deve ser R$
+59,70. Para quantidade zero, deve ser zero. Para quantidade negativa, a função
+deve rejeitar a entrada. Os tipos dizem que a quantidade é um número; os testes
+registram quais números fazem sentido para aquela regra.
+
+Agora imagine que, ao escrever esse primeiro teste, aparece outro obstáculo: o
+runner não reconhece um alias de importação que já funciona na aplicação. Depois
+de corrigir o alias, é preciso ajustar a transformação do TypeScript. Antes de
+verificar a regra do carrinho, você está mantendo uma segunda configuração para
+conseguir executar o mesmo código.
+
+Esse cenário ajuda a entender duas necessidades: testar as regras do produto e
+tornar esses testes simples de executar durante o desenvolvimento. É nessa
+segunda parte que a história do Vitest ganha importância.
+
+## Uma breve história até o Vitest
+
+Conforme aplicações web passaram a concentrar mais regras no front-end, cresceu
+a necessidade de verificar funções, validações e transformações de dados de
+forma automatizada. Ferramentas como Jasmine, Mocha e Jest ajudaram a
+estabelecer essa prática no ecossistema JavaScript, com diferentes escolhas de
+execução, asserções e configuração.
+
+O ambiente de desenvolvimento também mudou. TypeScript, módulos ESM, aliases e
+transformações feitas por plugins passaram a fazer parte de muitos projetos. Com
+o Vite, essas peças ganharam um fluxo integrado para desenvolvimento e build. A
+configuração dos testes, entretanto, nem sempre acompanhava esse mesmo caminho.
+
+Como a própria
+[documentação do Vitest explica](https://vitest.dev/guide/why.html), ferramentas
+como Jest foram criadas em outro contexto. Em projetos Vite, isso podia exigir
+dois fluxos de transformação: um para a aplicação e outro para os testes. Uma
+alteração em aliases ou na forma de carregar um módulo precisava ser refletida
+nos dois ambientes.
+
+O Vitest surgiu nesse contexto, com a proposta de usar a infraestrutura do Vite
+também na execução dos testes. Assim, o runner pode aproveitar a transformação
+de arquivos, a resolução de módulos e os plugins que o projeto já utiliza,
+oferecendo uma API familiar a quem conhece Jest.
+
+## Qual problema o Vitest tenta resolver
+
+O problema central é o **trabalho duplicado para preparar e manter o ambiente
+dos testes**. Se a aplicação já sabe transformar TypeScript e resolver seus
+imports, reaproveitar essa infraestrutura reduz a quantidade de ajustes que a
+equipe precisa manter em paralelo.
+
+Há também o tempo entre editar uma regra e descobrir se ela continua correta. O
+watch mode do Vitest acompanha as alterações e usa as relações entre os módulos
+para selecionar testes afetados. Isso facilita manter a suíte em execução
+enquanto o código é desenvolvido.
+
+No exemplo do carrinho, a ideia é gastar mais tempo escolhendo bons casos para o
+cálculo do subtotal e menos tempo fazendo o teste entender o projeto. Ainda cabe
+a quem desenvolve definir a regra, escrever as asserções e cobrir os limites. O
+Vitest fornece a infraestrutura para executar essas verificações; ele não
+descobre sozinho qual deveria ser o comportamento do produto.
+
+Em julho de 2026, minha escolha para **testes unitários no front-end é o
+Vitest**, especialmente em projetos com Vite, TypeScript e módulos ESM. Essa
+preferência vem da integração com o projeto, da configuração e do feedback
+durante o desenvolvimento.
+
+Para explicar essa decisão, vale olhar para o que um teste unitário entrega e
+comparar as vantagens e desvantagens de Vitest, Jest, Mocha e `node:test`.
+
+## O que considero um teste unitário
+
+Um teste unitário verifica uma unidade de comportamento com entradas e saídas
+controladas. No front-end, essa unidade pode ser uma função de validação, um
+formatador, um reducer ou uma regra que calcula se uma ação está disponível.
+
+Por exemplo: dados o preço de um item e a quantidade escolhida, qual deve ser o
+subtotal? Consigo testar essa regra diretamente, sem montar a tela do carrinho
+ou depender de uma chamada de rede.
+
+O objetivo é que cada caso seja previsível e que uma falha ajude a localizar o
+problema. Se a regra depende do horário atual ou de uma resposta externa, posso
+receber essa dependência como argumento ou controlá-la com um mock.
+
+## Vantagens e limites dos testes unitários
+
+**Feedback rápido.** Funções pequenas e dependências controladas geralmente
+permitem executar muitos casos em pouco tempo. Isso torna viável testar durante
+a edição, antes de concluir uma tarefa.
+
+**Falhas mais fáceis de investigar.** Quando um caso informa que três itens de
+R$ 19,90 deveriam custar R$ 59,70, fica claro qual regra precisa de atenção.
+
+**Segurança para refatorar.** Posso reorganizar a implementação e verificar se
+ela continua respeitando os mesmos comportamentos. Isso funciona melhor quando o
+teste observa resultados, sem depender de variáveis e funções internas.
+
+**Documentação dos casos de borda.** Quantidade zero, valor inválido, lista
+vazia e transições de estado deixam de ser decisões implícitas e passam a ter
+exemplos executáveis.
+
+Há custos e limites. Testes também precisam de manutenção. Se a unidade for
+definida de forma muito ligada à implementação, qualquer refatoração pode exigir
+reescrever a suíte. E, se tudo for simulado, os testes podem passar mesmo quando
+as dependências reais se comportam de outro jeito. A confiança oferecida por um
+teste unitário se limita à unidade e às condições que ele verifica.
+
+## Comparando as ferramentas para testes unitários
+
+<div className="overflow-x-auto">
+  <table>
+    <caption>
+      Vantagens e desvantagens para uma suíte unitária no front-end
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Ferramenta</th>
+        <th scope="col">Principal vantagem</th>
+        <th scope="col">Principal desvantagem</th>
+        <th scope="col">Quando faz sentido</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Vitest</th>
+        <td>Integração com Vite, TypeScript e ESM.</td>
+        <td>Migração de Jest pode exigir ajustes em mocks e configuração.</td>
+        <td>Projetos que já aproveitam o ecossistema Vite.</td>
+      </tr>
+      <tr>
+        <th scope="row">Jest</th>
+        <td>Ecossistema amplo e muita experiência acumulada nas equipes.</td>
+        <td>
+          Transformação e resolução de módulos podem exigir configuração
+          adicional.
+        </td>
+        <td>Bases existentes com uma suíte estável.</td>
+      </tr>
+      <tr>
+        <th scope="row">Mocha</th>
+        <td>Liberdade para escolher as peças do ambiente de testes.</td>
+        <td>Mais integrações para configurar e manter.</td>
+        <td>
+          Projetos com necessidades específicas ou infraestrutura já montada.
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">node:test</th>
+        <td>Runner incluído no Node.js, reduzindo dependências externas.</td>
+        <td>Não reutiliza automaticamente o pipeline do front-end.</td>
+        <td>Módulos de lógica que executam diretamente no Node.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+### Vitest
+
+O Vitest reúne execução de testes, asserções, mocks, snapshots e integração com
+cobertura. Para testar lógica pura, o ambiente Node é suficiente.
+
+**Vantagens:** usa a infraestrutura do Vite para transformar código e resolver
+módulos. Em um projeto Vite, posso reaproveitar aliases e plugins, diminuindo a
+duplicação de configuração. TypeScript e ESM se encaixam nesse fluxo, e o watch
+mode facilita repetir os testes enquanto altero uma regra.
+
+**Desvantagens:** a API familiar a quem usa Jest não significa compatibilidade
+total. Existem diferenças no comportamento dos mocks, nos globais e no
+tratamento de módulos. Fora do ecossistema Vite, preciso avaliar o custo da
+integração. Executar um arquivo TypeScript também não substitui a checagem de
+tipos.
+
+### Jest
+
+O Jest também oferece um conjunto integrado para execução, asserções, mocks e
+snapshots. É uma opção conhecida em projetos JavaScript e TypeScript.
+
+**Vantagens:** tem um ecossistema amplo, exemplos para muitos cenários e equipes
+que já dominam suas ferramentas. Uma suíte Jest estável representa investimento
+em regras documentadas e conhecimento sobre o produto.
+
+**Desvantagens:** dependendo do projeto, TypeScript, ESM e aliases exigem
+transformadores e configuração adicional. Em uma aplicação Vite, manter essa
+configuração separada pode duplicar trabalho.
+
+Eu manteria Jest onde ele atende bem. Uma migração precisa compensar o esforço
+de revisar mocks, configurações e comportamentos da suíte existente.
+
+### Mocha
+
+O Mocha organiza e executa os testes. As outras peças podem ser escolhidas
+separadamente: por exemplo, Chai ou `node:assert` para asserções e Sinon para
+spies, stubs e mocks.
+
+**Vantagens:** permite adaptar o ambiente às necessidades do projeto, sem
+obrigar a equipe a adotar um conjunto único de ferramentas. Essa liberdade é
+útil quando já existe uma infraestrutura que funciona bem.
+
+**Desvantagens:** a equipe precisa integrar e manter mais peças. Transformação
+de TypeScript, resolução de módulos, cobertura e mocking podem demandar escolhas
+e configurações próprias. Para uma base nova com Vite, eu prefiro a integração
+oferecida pelo Vitest.
+
+### node:test
+
+O `node:test` é o runner nativo do Node.js. Com `node:assert/strict`, permite
+escrever testes unitários sem instalar um framework externo de testes.
+
+**Vantagens:** reduz dependências e atende bem módulos de lógica compatíveis com
+o ambiente Node. Pode ser uma escolha suficiente para utilitários e bibliotecas
+pequenas que não dependem da transformação do front-end.
+
+**Desvantagens:** não herda automaticamente aliases, plugins ou transformações
+do Vite. Recursos disponíveis e suporte à execução de TypeScript dependem da
+versão do Node e da sintaxe usada. Executar TypeScript diretamente não equivale
+a aplicar toda a configuração do `tsconfig` nem a fazer checagem de tipos.
+
+## Por que escolho Vitest em julho de 2026
+
+Para uma base nova no contexto de Vite e TypeScript, estes são os critérios que
+pesam na minha escolha:
+
+1. **Configuração próxima da aplicação.** Reutilizar aliases e transformações
+   reduz as diferenças entre o código que desenvolvo e o código que testo.
+2. **Feedback durante a edição.** O watch mode ajuda a conferir a regra a cada
+   mudança, mantendo o teste dentro do fluxo de desenvolvimento.
+3. **Ferramentas disponíveis no mesmo conjunto.** `expect`, `vi.fn()`, spies e
+   controle de timers atendem às necessidades comuns de uma suíte unitária.
+4. **Uma API familiar.** `describe`, `it` e `expect` facilitam a leitura para
+   quem já conhece Jest, embora a migração ainda exija revisão.
+5. **Boa adaptação à lógica do front-end.** Consigo testar validadores, reducers
+   e transformações de dados em Node, sem preparar um DOM quando ele é
+   desnecessário.
+
+Esses critérios explicam minha preferência, mas não provam que Vitest será mais
+rápido em qualquer projeto. Para justificar uma migração por desempenho, eu
+mediria a mesma suíte antes e depois, incluindo tempo de execução no CI, consumo
+de memória e estabilidade.
+
+## Exemplo: testando uma regra de subtotal
+
+Considere uma regra usada pelo carrinho: o preço é informado em centavos, a
+quantidade deve ser um inteiro não negativo e quantidade zero produz subtotal
+zero. Trabalhar com centavos inteiros evita introduzir frações decimais nesse
+cálculo. Para este exemplo, os valores estão dentro de uma faixa pequena,
+compatível com os inteiros seguros do JavaScript.
+
+Em um projeto que já usa Vite e TypeScript, adiciono o Vitest:
+
+```bash
+yarn add -D vitest
+```
+
+Crio `src/lib/calcularSubtotal.ts`:
+
+```typescript
+export function calcularSubtotal(
+  precoEmCentavos: number,
+  quantidade: number
+): number {
+  if (!Number.isInteger(precoEmCentavos) || precoEmCentavos < 0) {
+    throw new RangeError('O preço deve ser um inteiro não negativo.');
+  }
+
+  if (!Number.isInteger(quantidade) || quantidade < 0) {
+    throw new RangeError('A quantidade deve ser um inteiro não negativo.');
+  }
+
+  return precoEmCentavos * quantidade;
+}
+```
+
+Ao lado, em `src/lib/calcularSubtotal.test.ts`, descrevo os comportamentos:
+
+```typescript
+import { describe, expect, it } from 'vitest';
+import { calcularSubtotal } from './calcularSubtotal';
+
+describe('calcularSubtotal', () => {
+  it('multiplica o preço em centavos pela quantidade', () => {
+    expect(calcularSubtotal(1990, 3)).toBe(5970);
+  });
+
+  it('retorna zero quando nenhum item foi escolhido', () => {
+    expect(calcularSubtotal(1990, 0)).toBe(0);
+  });
+
+  it('aceita um item gratuito', () => {
+    expect(calcularSubtotal(0, 2)).toBe(0);
+  });
+
+  it.each([-1, 1.5, NaN, Infinity])(
+    'rejeita a quantidade inválida %s',
+    quantidade => {
+      expect(() => calcularSubtotal(1990, quantidade)).toThrow(RangeError);
+    }
+  );
+
+  it.each([-100, 19.9, NaN, Infinity])('rejeita o preço inválido %s', preco => {
+    expect(() => calcularSubtotal(preco, 1)).toThrow(RangeError);
+  });
+});
+```
+
+Os casos cobrem o resultado esperado, os limites aceitos e entradas inválidas.
+Não preciso de mocks: a função recebe tudo de que precisa pelos argumentos.
+
+Para esse exemplo, o ambiente Node padrão do Vitest é suficiente. O runner
+descobre arquivos `.test.ts` e pode carregar a configuração Vite existente; não
+é necessário adicionar `jsdom` ou uma biblioteca de renderização.
+
+Durante a implementação, uso `yarn vitest` para acompanhar as alterações. No CI,
+uso `yarn vitest run`, que executa a suíte uma vez e encerra. A checagem de
+tipos continua sendo uma etapa separada, com o comando adequado ao `tsconfig` do
+projeto.
+
+## Cuidados que tornam a suíte útil
+
+**Testar comportamento.** O teste deve expressar uma regra que importa para o
+produto. Se trocar a implementação sem mudar o resultado exige reescrever muitos
+casos, vale revisar o acoplamento da suíte.
+
+**Usar mocks quando houver uma dependência a controlar.** Relógio, aleatoriedade
+e acesso externo podem precisar de controle. Simular cada função interna aumenta
+o custo da manutenção e pode esconder o comportamento que deveria ser
+verificado. Quando houver spies ou timers falsos, restauro o estado depois de
+cada teste.
+
+**Cobrir limites e erros.** O caminho feliz é só uma parte da regra. Valores
+vazios, entradas inválidas e mudanças de estado merecem casos explícitos.
+
+**Manter independência.** Cada teste deve preparar seus próprios dados e poder
+rodar sem depender da ordem dos demais. Estado compartilhado mutável costuma
+produzir falhas difíceis de reproduzir.
+
+**Tratar cobertura como sinal.** Uma linha executada pode não ter seu resultado
+verificado. Uso o relatório para encontrar lacunas, sem confundir uma
+porcentagem alta com a garantia de que as regras estão corretas.
+
+## Minha escolha para a suíte unitária
+
+Escolho **Vitest** pela combinação de integração com Vite, suporte ao fluxo de
+TypeScript e ferramentas que simplificam a escrita dos testes unitários. Começo
+pelas regras importantes do produto, com casos pequenos, previsíveis e fáceis de
+diagnosticar.
+
+Jest, Mocha e `node:test` continuam sendo escolhas válidas conforme o projeto. O
+que sustenta minha preferência é o custo de configurar, executar e manter a
+suíte no contexto em que trabalho.
+
+**Os testes E2E ficam para outro artigo, no qual vou falar do Playwright, que
+uso para essa finalidade.**
+
+## Referências oficiais
+
+- [Vitest: por que usar](https://vitest.dev/guide/why.html)
+- [Vitest: primeiros passos](https://vitest.dev/guide/)
+- [Vitest: configuração](https://vitest.dev/config/)
+- [Vitest: migração do Jest](https://vitest.dev/guide/migration.html)
+- [Jest: primeiros passos](https://jestjs.io/docs/getting-started)
+- [Mocha: documentação](https://mochajs.org/)
+- [Node.js: test runner](https://nodejs.org/api/test.html)
+- [Node.js: asserções](https://nodejs.org/api/assert.html)
