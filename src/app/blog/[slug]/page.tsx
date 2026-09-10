@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Infographic from '@/components/Infographic';
 import Layout from '@/components/Layout';
 import Mermaid from '@/components/Mermaid';
+import SpringBootInfographic from '@/components/SpringBootInfographic';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
@@ -12,10 +13,10 @@ import BlogPostContent from './BlogPostContent';
 import React from 'react';
 
 const components = {
-  pre: ({ children, ...props }: any) => {
+  pre: ({ children, ...props }: React.ComponentProps<'pre'>) => {
     // Check if this is a code block with language-* className
-    if (React.isValidElement(children) && (children as React.ReactElement<any>).type === 'code') {
-      const codeElement = children as React.ReactElement<any>;
+    if (React.isValidElement<React.ComponentProps<'code'>>(children) && children.type === 'code') {
+      const codeElement = children;
       const className = codeElement.props?.className || '';
       const codeChildren = codeElement.props?.children || '';
 
@@ -30,10 +31,11 @@ const components = {
     }
     return <pre {...props}>{children}</pre>;
   },
-  code: (props: any) => <code {...props} />,
+  code: (props: React.ComponentProps<'code'>) => <code {...props} />,
   Mermaid,
   Infographic,
   DecisionGraph,
+  SpringBootInfographic,
 };
 
 export async function generateStaticParams() {

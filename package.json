@@ -2,41 +2,57 @@
   "name": "app-next",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "yarn@4.18.0",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
     "export": "next build --webpack",
-    "deploy:netlify": "pnpm build && netlify deploy --prod",
-    "deploy:github": "pnpm build && gh-pages -d out"
+    "deploy:netlify": "yarn build && netlify deploy --prod",
+    "deploy:github": "yarn build && gh-pages -d out"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.20",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "framer-motion": "^12.23.24",
+    "date-fns": "^4.4.0",
+    "framer-motion": "^13.2.0",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^0.555.0",
-    "mermaid": "^11.12.1",
-    "next": "16.0.5",
-    "next-mdx-remote": "^5.0.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "react-icons": "^5.5.0",
-    "tailwind-merge": "^3.4.0"
+    "lucide-react": "^1.44.0",
+    "mermaid": "^12.0.0",
+    "next": "^16.3.4",
+    "next-mdx-remote": "^6.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-icons": "^5.7.0",
+    "tailwind-merge": "^3.6.0"
+  },
+  "resolutions": {
+    "lodash-es": "4.18.1",
+    "workbox-build": "7.4.1",
+    "workbox-core": "7.4.1",
+    "workbox-webpack-plugin": "7.4.1",
+    "workbox-window": "7.4.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "autoprefixer": "^10.4.22",
-    "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.5",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.5.6",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3",
+    "webpack": "^5.110.3"
   }
 }
