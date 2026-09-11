@@ -1,12 +1,9 @@
 'use client';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import React, { useRef } from 'react';
+import React from 'react';
 
 const About: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -54,20 +51,25 @@ const About: React.FC = () => {
   };
 
   return (
-    <section id="sobre" className="section relative overflow-hidden pt-20 sm:pt-24 md:pt-12">
+    <section
+      id="sobre"
+      className="section relative overflow-hidden pt-20 sm:pt-24 md:pt-12"
+    >
       {/* Background elements */}
       <div className="absolute inset-0 bg-dots-pattern opacity-10" />
 
       <div className="container-custom relative z-10">
         <motion.div
-          ref={ref}
           variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          initial={false}
+          animate="visible"
           className="grid md:grid-cols-2 gap-8 md:gap-12 items-start"
         >
           {/* Left side - Image */}
-          <motion.div variants={imageVariants} className="relative px-4 md:px-0">
+          <motion.div
+            variants={imageVariants}
+            className="relative px-4 md:px-0"
+          >
             <div className="relative z-10 max-w-md mx-auto md:max-w-none">
               {/* Profile image */}
               <motion.div
@@ -129,7 +131,10 @@ const About: React.FC = () => {
           </motion.div>
 
           {/* Right side - Content */}
-          <motion.div variants={textContainerVariants} className="space-y-4 md:space-y-6 px-4 md:px-0">
+          <motion.div
+            variants={textContainerVariants}
+            className="space-y-4 md:space-y-6 px-4 md:px-0"
+          >
             <div className="space-y-3 md:space-y-4 text-sm md:text-base text-dark-300 leading-relaxed">
               <motion.p variants={paragraphVariants}>
                 Engenheiro de Software com{' '}

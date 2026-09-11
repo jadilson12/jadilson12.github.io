@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { MotionConfig } from 'framer-motion';
 import ScrollToTop from './ScrollToTop';
 
 interface ClientLayoutProps {
@@ -33,15 +34,18 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
 
     return () => {
       window.removeEventListener('error', handleError);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        'unhandledrejection',
+        handleUnhandledRejection
+      );
     };
   }, []);
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       {children}
       <ScrollToTop />
-    </>
+    </MotionConfig>
   );
 };
 

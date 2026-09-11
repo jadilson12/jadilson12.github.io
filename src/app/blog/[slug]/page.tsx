@@ -1,3 +1,4 @@
+/* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- Scrollable code, tables and diagrams need keyboard focus for arrow-key scrolling. */
 import CodeBlock from '@/components/CodeBlock';
 import DecisionGraph from '@/components/DecisionGraph';
 import Header from '@/components/Header';
@@ -7,23 +8,39 @@ import Mermaid from '@/components/Mermaid';
 import SpringBootInfographic from '@/components/SpringBootInfographic';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import type { Metadata } from 'next';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import JsonLd from '@/components/JsonLd';
+import { pageMetadata, articleSchema, breadcrumbs } from '@/lib/seo';
+import { compileMDX } from 'next-mdx-remote/rsc';
+import { collectHeadings, type TocItem } from '@/lib/headings';
 import BlogPostContent from './BlogPostContent';
 
 import React from 'react';
 
 const components = {
+  table: (props: React.ComponentProps<'table'>) => (
+    <section
+      aria-label="Tabela do artigo"
+      tabIndex={0}
+      className="my-6 max-w-full overflow-x-auto rounded-lg border border-dark-700"
+    >
+      <table {...props} />
+    </section>
+  ),
   pre: ({ children, ...props }: React.ComponentProps<'pre'>) => {
     // Check if this is a code block with language-* className
-    if (React.isValidElement<React.ComponentProps<'code'>>(children) && children.type === 'code') {
+    // MDX can supply the custom Code component instead of the literal 'code' tag.
+    if (React.isValidElement<React.ComponentProps<'code'>>(children)) {
       const codeElement = children;
       const className = codeElement.props?.className || '';
       const codeChildren = codeElement.props?.children || '';
 
       // Check if it's a mermaid diagram
       if (className?.includes('language-mermaid')) {
-        console.log('🎨 Detected Mermaid code block, rendering diagram');
-        return <Mermaid chart={typeof codeChildren === 'string' ? codeChildren : ''} />;
+        return (
+          <Mermaid
+            chart={typeof codeChildren === 'string' ? codeChildren : ''}
+          />
+        );
       }
 
       // For other code blocks, pass to CodeBlock component
@@ -38,42 +55,62 @@ const components = {
   SpringBootInfographic,
 };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
-  return posts.map((post) => ({
+  return posts.map(post => ({
     slug: post.id,
   }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostData(slug);
-  return {
-    title: `${post.title} | Jadilson Guedes`,
-    description: post.description,
-  };
+  return pageMetadata({
+    title: post.title,
+    description: post.description || post.title,
+    path: `/blog/${post.slug}`,
+    post,
+  });
 }
 
-export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const post = getPostData(slug);
+  const headings: TocItem[] = [];
+  const { content } = await compileMDX({
+    source: post.content || '',
+    components,
+    options: { mdxOptions: { remarkPlugins: [collectHeadings(headings)] } },
+  });
 
   return (
     <Layout>
-      {/* React 19: Native document metadata support */}
-      <title>{post.title} | Jadilson Guedes</title>
-      <meta name="description" content={post.description} />
-      <meta property="og:title" content={post.title} />
-      <meta property="og:description" content={post.description} />
-      <meta property="og:type" content="article" />
-      <meta property="article:published_time" content={new Date(post.date).toISOString()} />
-      {post.tags && post.tags.map(tag => (
-        <meta key={tag} property="article:tag" content={tag} />
-      ))}
-
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            articleSchema(post),
+            breadcrumbs([
+              { name: 'Início', path: '/' },
+              { name: 'Blog', path: '/blog' },
+              { name: post.title, path: `/blog/${post.slug}` },
+            ]),
+          ],
+        }}
+      />
       <Header />
-      <BlogPostContent post={post}>
-        <MDXRemote source={post.content || ''} components={components} />
+      <BlogPostContent key={post.slug} post={post} headings={headings}>
+        {content}
       </BlogPostContent>
     </Layout>
   );

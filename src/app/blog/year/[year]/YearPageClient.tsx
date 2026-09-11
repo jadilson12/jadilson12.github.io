@@ -25,7 +25,7 @@ const YearPageClient: React.FC<YearPageClientProps> = ({
   postsByMonth
 }) => {
   return (
-    <div className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
+    <div id="main-content" tabIndex={-1} className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
       <div className="container-custom max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <Breadcrumb
@@ -126,6 +126,7 @@ const YearPageClient: React.FC<YearPageClientProps> = ({
                                 <h3 className="text-white font-medium text-sm">Jadilson Guedes</h3>
                                 <time className="text-primary-300 text-xs">
                                   {new Date(post.date).toLocaleDateString('pt-BR', {
+                                    timeZone: 'UTC',
                                     year: 'numeric',
                                     month: 'short',
                                     day: 'numeric',

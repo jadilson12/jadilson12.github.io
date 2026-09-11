@@ -2,101 +2,82 @@
 
 import type { PostData } from '@/lib/posts';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useOptimistic, useTransition } from 'react';
+import { Suspense, useEffect, useState, useTransition } from 'react';
 import BlogList from './BlogList';
 
-interface BlogPageClientProps {
-  posts: PostData[];
-}
-
 interface FilterState {
+  query: string;
   selectedDate: string;
   selectedTag: string;
 }
 
-const BlogPageClient: React.FC<BlogPageClientProps> = ({ posts }) => {
-  const router = useRouter();
+// Only URL synchronization waits for hydration; article links are pre-rendered.
+function FilterSync({
+  onChange,
+}: {
+  onChange: (filters: FilterState) => void;
+}) {
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const query = searchParams.get('q') || '';
+  const selectedDate = searchParams.get('date') || '';
+  const selectedTag = searchParams.get('tag') || '';
 
-  // Initialize filters from URL params
-  const [filters, setFilters] = React.useState<FilterState>({
-    selectedDate: searchParams.get('date') || '',
-    selectedTag: searchParams.get('tag') || '',
+  useEffect(() => {
+    onChange({ query, selectedDate, selectedTag });
+  }, [query, selectedDate, selectedTag, onChange]);
+
+  return null;
+}
+
+export default function BlogPageClient({ posts }: { posts: PostData[] }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [filters, setFilters] = useState<FilterState>({
+    query: '',
+    selectedDate: '',
+    selectedTag: '',
   });
 
-  // Use React 19's useOptimistic for instant UI feedback
-  const [optimisticFilters, setOptimisticFilters] = useOptimistic(
-    filters,
-    (state, newFilters: FilterState) => newFilters
-  );
-
-  // Update filters when URL params change
-  React.useEffect(() => {
-    const date = searchParams.get('date') || '';
-    const tag = searchParams.get('tag') || '';
-
-    if (date !== filters.selectedDate || tag !== filters.selectedTag) {
-      setFilters({ selectedDate: date, selectedTag: tag });
-    }
-  }, [searchParams, filters.selectedDate, filters.selectedTag]);
-
-  const handleDateClick = (date: string) => {
-    const newFilters = {
-      selectedDate: date === filters.selectedDate ? '' : date,
-      selectedTag: '', // Clear tag filter when selecting date
-    };
-
-    // Show optimistic update immediately
-    setOptimisticFilters(newFilters);
-
-    // Update URL
-    const params = new URLSearchParams();
-    if (newFilters.selectedDate) {
-      params.set('date', newFilters.selectedDate);
-    }
-    const queryString = params.toString();
-    router.push(queryString ? `/blog?${queryString}` : '/blog', { scroll: false });
-
-    // Then update actual state in a transition
+  function updateFilters(next: FilterState) {
     startTransition(() => {
-      setFilters(newFilters);
+      setFilters(next);
+      const params = new URLSearchParams();
+      if (next.query.trim()) params.set('q', next.query.trim());
+      if (next.selectedDate) params.set('date', next.selectedDate);
+      if (next.selectedTag) params.set('tag', next.selectedTag);
+      const query = params.toString();
+      router.push(query ? `/blog?${query}` : '/blog', { scroll: false });
     });
-  };
-
-  const handleTagClick = (tag: string) => {
-    const newFilters = {
-      selectedTag: tag === filters.selectedTag ? '' : tag,
-      selectedDate: '', // Clear date filter when selecting tag
-    };
-
-    // Show optimistic update immediately
-    setOptimisticFilters(newFilters);
-
-    // Update URL
-    const params = new URLSearchParams();
-    if (newFilters.selectedTag) {
-      params.set('tag', newFilters.selectedTag);
-    }
-    const queryString = params.toString();
-    router.push(queryString ? `/blog?${queryString}` : '/blog', { scroll: false });
-
-    // Then update actual state in a transition
-    startTransition(() => {
-      setFilters(newFilters);
-    });
-  };
+  }
 
   return (
-    <BlogList
-      posts={posts}
-      selectedDate={optimisticFilters.selectedDate}
-      selectedTag={optimisticFilters.selectedTag}
-      onDateClick={handleDateClick}
-      onTagClick={handleTagClick}
-      isPending={isPending}
-    />
+    <>
+      <Suspense fallback={null}>
+        <FilterSync onChange={setFilters} />
+      </Suspense>
+      <BlogList
+        posts={posts}
+        query={filters.query}
+        onSearch={query => updateFilters({ ...filters, query })}
+        onClear={() =>
+          updateFilters({ query: '', selectedDate: '', selectedTag: '' })
+        }
+        selectedDate={filters.selectedDate}
+        selectedTag={filters.selectedTag}
+        onDateClick={date =>
+          updateFilters({
+            ...filters,
+            selectedDate: date === filters.selectedDate ? '' : date,
+          })
+        }
+        onTagClick={tag =>
+          updateFilters({
+            ...filters,
+            selectedTag: tag === filters.selectedTag ? '' : tag,
+          })
+        }
+        isPending={isPending}
+      />
+    </>
   );
-};
-
-export default BlogPageClient;
+}

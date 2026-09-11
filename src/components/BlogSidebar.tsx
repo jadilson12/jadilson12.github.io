@@ -39,8 +39,8 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
 
     posts.forEach((post) => {
       const date = new Date(post.date);
-      const year = date.getFullYear().toString();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getUTCFullYear().toString();
+      const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
 
       if (!groups[year]) {
         groups[year] = { year, months: {} };
@@ -155,8 +155,10 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
                     </span>
                   </Link>
                   <button
+                    aria-label={`${isYearExpanded ? 'Recolher' : 'Expandir'} artigos de ${yearGroup.year}`}
+                    aria-expanded={isYearExpanded}
                     onClick={() => toggleYear(yearGroup.year)}
-                    className="p-1 hover:text-primary-300 transition-colors duration-200"
+                    className="min-h-11 min-w-11 p-1 hover:text-primary-300 transition-colors duration-200"
                   >
                     <svg
                       className={`w-4 h-4 transition-transform duration-200 ${isYearExpanded ? 'rotate-180' : ''}`}
@@ -219,7 +221,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
                               >
                                 {data.posts.map((post) => {
                                   const postDate = new Date(post.date);
-                                  const day = postDate.getDate().toString().padStart(2, '0');
+                                  const day = postDate.getUTCDate().toString().padStart(2, '0');
                                   const dateKey = `${yearGroup.year}-${month}-${day}`;
                                   const isSelected = selectedDate === dateKey;
 

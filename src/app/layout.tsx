@@ -1,69 +1,63 @@
-import type { Metadata } from "next";
-import PageTransition from "@/components/PageTransition";
-import ClientLayout from "@/components/ClientLayout";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+import JsonLd from '@/components/JsonLd';
+import { assetPath, canonicalUrl, site } from '@/lib/site';
+import PageTransition from '@/components/PageTransition';
+import ClientLayout from '@/components/ClientLayout';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps",
-  description: "Engenheiro de Software com 8+ anos desenvolvendo soluções completas do planejamento à implantação. Especialista em on-premise, cloud e integração com IA.",
-  keywords: [
-    'engenheiro de software',
-    'software engineer',
-    'desenvolvedor full stack',
-    'on-premise',
-    'cloud computing',
-    'inteligência artificial',
-    'kubernetes',
-    'azure',
-    'devops',
-    'nodejs',
-    'java',
-    'python',
-    'react',
-    'typescript',
-    'microserviços',
-    'ci/cd',
-    'chatbots',
-    'government technology',
-    'govtech',
-  ],
-  authors: [{ name: 'Jadilson Guedes' }],
-  creator: 'Jadilson Guedes',
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'J.Guedes',
+  metadataBase: new URL(site.url),
+  title: { default: site.title, template: `%s | ${site.name}` },
+  description: site.description,
+  authors: [{ name: site.name, url: canonicalUrl('/sobre') }],
+  creator: site.name,
+  publisher: site.name,
+  applicationName: site.name,
+  manifest: assetPath('/manifest.webmanifest'),
+  icons: {
+    icon: [
+      { url: assetPath('/icons/icon.svg'), type: 'image/svg+xml' },
+      {
+        url: assetPath('/icons/icon-48x48.png'),
+        sizes: '48x48',
+        type: 'image/png',
+      },
+    ],
+    apple: [
+      {
+        url: assetPath('/icons/apple-touch-icon.png'),
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
   },
-  formatDetection: {
-    telephone: false,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    title: 'Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps',
-    description: 'Engenheiro de Software com 8+ anos desenvolvendo soluções do planejamento à implantação. On-premise, cloud e integração com IA.',
-    siteName: 'Jadilson Guedes',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Jadilson Guedes - Engenheiro de Software',
-    description: 'Do planejamento à implantação | On-Premise, Cloud e IA',
-  },
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'J.Guedes' },
+  formatDetection: { telephone: false },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -78,13 +72,40 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-dark-950 text-dark-50`}
       >
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'Person',
+                '@id': `${canonicalUrl()}#person`,
+                name: site.name,
+                url: canonicalUrl('/sobre'),
+                image: 'https://github.com/jadilson12.png',
+                jobTitle: 'Engenheiro de Software',
+                sameAs: site.socialProfiles,
+              },
+              {
+                '@type': 'WebSite',
+                '@id': `${canonicalUrl()}#website`,
+                url: canonicalUrl(),
+                name: site.name,
+                description: site.description,
+                inLanguage: site.language,
+                publisher: { '@id': `${canonicalUrl()}#person` },
+              },
+            ],
+          }}
+        />
+        <a
+          href="#main-content"
+          className="fixed left-4 top-2 z-50 -translate-y-24 rounded-lg bg-primary-300 px-4 py-3 text-dark-950 focus:translate-y-0"
+        >
+          Pular para o conteúdo
+        </a>
         <ClientLayout>
           <PageTransition>{children}</PageTransition>
         </ClientLayout>

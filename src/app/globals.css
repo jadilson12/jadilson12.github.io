@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
 @theme {
@@ -25,8 +25,12 @@
   --color-dark-900: #0a0a0a;
   --color-dark-950: #050505;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
-  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter',
+    system-ui, sans-serif;
+  --font-display:
+    'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', system-ui,
+    sans-serif;
 
   --animate-fade-in: fadeIn 0.6s ease-out forwards;
   --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
@@ -38,52 +42,106 @@
   --animate-float: float 6s ease-in-out infinite;
 
   @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
   @keyframes fadeInUp {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   @keyframes fadeInDown {
-    0% { opacity: 0; transform: translateY(-30px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   @keyframes slideInLeft {
-    0% { opacity: 0; transform: translateX(-50px); }
-    100% { opacity: 1; transform: translateX(0); }
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
   @keyframes slideInRight {
-    0% { opacity: 0; transform: translateX(50px); }
-    100% { opacity: 1; transform: translateX(0); }
+    0% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
   @keyframes scaleIn {
-    0% { opacity: 0; transform: scale(0.9); }
-    100% { opacity: 1; transform: scale(1); }
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   @keyframes gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
   }
 }
 
 @layer utilities {
   .bg-grid-pattern {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    );
     background-size: 20px 20px;
   }
 
   .bg-dots-pattern {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    );
     background-size: 20px 20px;
   }
 
   .text-gradient-primary {
-    background: linear-gradient(135deg, var(--color-primary-300) 0%, var(--color-primary-500) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-300) 0%,
+      var(--color-primary-500) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -190,7 +248,11 @@
     position: absolute;
     inset: -2px;
     border-radius: inherit;
-    background: linear-gradient(135deg, var(--color-primary-300), var(--color-primary-500));
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-300),
+      var(--color-primary-500)
+    );
     opacity: 0;
     transition: opacity 0.3s;
     z-index: -1;
@@ -230,7 +292,9 @@
   }
 
   .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   .hover-lift:hover {
@@ -268,8 +332,8 @@
   .snap-section {
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    height: 100vh; /* Fallback */
-    height: 100dvh; /* Dynamic viewport height for mobile */
+    height: auto;
+    padding-block: 4rem;
     min-height: 100vh;
     min-height: 100dvh;
   }
@@ -277,7 +341,7 @@
   /* Fallback for browsers that don't support dvh */
   @supports not (height: 100dvh) {
     .snap-section {
-      height: 100vh;
+      height: auto;
       min-height: 100vh;
     }
   }
@@ -330,7 +394,6 @@ body {
   position: relative;
 }
 
-
 /* Mobile optimizations */
 @media (max-width: 768px) {
   html {
@@ -338,10 +401,10 @@ body {
   }
 
   /* Prevent zoom on input focus on iOS */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='number'],
   textarea,
   select {
     font-size: 16px;
@@ -366,14 +429,6 @@ body {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
-
-  /* Ensure fixed header works on mobile */
-  header {
-    position: fixed !important;
-    top: 0 !important;
-    width: 100% !important;
-    z-index: 9999 !important;
-  }
 }
 
 /* Premium animations */
@@ -387,7 +442,8 @@ body {
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(201, 243, 29, 0.3);
   }
   50% {
@@ -458,4 +514,52 @@ body {
 .mermaid-container .marker {
   fill: var(--color-primary-300) !important;
   stroke: var(--color-primary-300) !important;
+}
+
+/* Predictable navigation and visible keyboard focus. */
+html {
+  scroll-padding-top: 6rem;
+}
+:where(h1, h2, h3, section[id]) {
+  scroll-margin-top: 1rem;
+}
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary-300);
+  outline-offset: 4px;
+}
+.site-modal::backdrop {
+  background: rgb(0 0 0 / 80%);
+  backdrop-filter: blur(4px);
+}
+.site-modal {
+  overscroll-behavior: contain;
+}
+.article-content {
+  overflow-wrap: anywhere;
+}
+.article-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-wrap: normal;
+}
+.article-content table {
+  margin: 0;
+  min-width: 100%;
+}
+.article-content th,
+.article-content td {
+  min-width: 9rem;
+  padding: 0.75rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
