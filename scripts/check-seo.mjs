@@ -68,6 +68,28 @@ for (const url of urls) {
     image
   );
   imageUrls.add(image);
+  for (const [property, expected] of [
+    ['og:image:width', '1200'],
+    ['og:image:height', '630'],
+    ['og:image:type', 'image/png'],
+  ]) {
+    assert.equal(
+      meta.find(item => item.property === property)?.content,
+      expected,
+      `${url}: invalid ${property}`
+    );
+  }
+  assert(
+    meta.find(item => item.property === 'og:image:alt')?.content,
+    `${url}: missing image description`
+  );
+  if (['/', '/blog/', '/sobre/', '/contato/'].includes(pathname)) {
+    assert.equal(
+      image,
+      `${origin}/og/profile-card/image.png`,
+      `${url}: missing profile card`
+    );
+  }
   const structured = [
     ...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs),
   ].flatMap(match => JSON.parse(match[1])['@graph'] || []);

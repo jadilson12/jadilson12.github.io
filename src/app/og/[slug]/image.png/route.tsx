@@ -1,4 +1,7 @@
 import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import ProfileCard from '@/components/og/ProfileCard';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { site } from '@/lib/site';
 
@@ -8,6 +11,7 @@ export const dynamicParams = false;
 export function generateStaticParams() {
   return [
     { slug: 'site' },
+    { slug: 'profile-card' },
     ...getSortedPostsData().map(post => ({ slug: post.slug })),
   ];
 }
@@ -17,7 +21,18 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const post = slug === 'site' ? undefined : getPostData(slug);
+  if (slug === 'site' || slug === 'profile-card') {
+    const photo = await readFile(
+      path.join(process.cwd(), 'public', site.portrait)
+    );
+    return new ImageResponse(
+      <ProfileCard
+        photo={`data:image/jpeg;base64,${photo.toString('base64')}`}
+      />,
+      { width: 1200, height: 630 }
+    );
+  }
+  const post = getPostData(slug);
 
   return new ImageResponse(
     <div

@@ -17,9 +17,12 @@ export function pageMetadata({
   const images = [
     {
       url: socialImageUrl(post?.slug),
+      type: 'image/png',
       width: 1200,
       height: 630,
-      alt: post?.title || site.title,
+      alt:
+        post?.title ||
+        `${site.name} — ${site.profession}. jadilson.dev. GitHub, LinkedIn, X e ${site.email}.`,
     },
   ];
 

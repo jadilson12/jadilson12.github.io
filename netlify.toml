@@ -1,5 +1,5 @@
 [build]
-  command = "yarn test:llms && yarn build && yarn check:llms"
+  command = "yarn test:llms && yarn build && yarn check:seo && yarn check:llms"
   publish = "out"
 
 [build.environment]

@@ -50,8 +50,10 @@ jobs:
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
 
-      - name: Validate LLM exports
-        run: yarn check:llms
+      - name: Validate SEO and LLM exports
+        run: |
+          yarn check:seo
+          yarn check:llms
 
       - name: Add .nojekyll file
         run: touch ./out/.nojekyll

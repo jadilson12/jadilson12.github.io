@@ -39,8 +39,10 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Validate LLM exports
-        run: yarn check:llms
+      - name: Validate SEO and LLM exports
+        run: |
+          yarn check:seo
+          yarn check:llms
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
