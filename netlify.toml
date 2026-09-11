@@ -1,5 +1,5 @@
 [build]
-  command = "yarn build"
+  command = "yarn test:llms && yarn build && yarn check:llms"
   publish = "out"
 
 [build.environment]
@@ -19,6 +19,24 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Link = '<https://jadilson.dev/llms.txt>; rel="describedby"'
+
+[[headers]]
+  for = "/blog/*/index.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sobre/index.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/llm*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/sw.js"

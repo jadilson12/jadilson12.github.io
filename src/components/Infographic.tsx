@@ -6,22 +6,12 @@ import Modal from './Modal';
 
 // --- Types ---
 
-export type NodeType = 'start' | 'question' | 'result' | 'default';
-
-export interface InfographicNode {
-  id: string;
-  type: NodeType;
-  label: string;
-  icon?: string;
-  subLabel?: string;
-  highlight?: 'emerald' | 'blue' | 'purple' | 'red' | 'default';
-  children?: InfographicEdge[];
-}
-
-export interface InfographicEdge {
-  label?: string; // e.g. "Sim", "Não"
-  node: InfographicNode;
-}
+import type { InfographicNode } from '@/lib/infographics';
+export type {
+  InfographicNode,
+  InfographicEdge,
+  NodeType,
+} from '@/lib/infographics';
 
 export interface InfographicProps {
   data: InfographicNode;

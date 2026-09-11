@@ -72,6 +72,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link
+          rel="describedby"
+          href={assetPath('/llms.txt')}
+          type="text/plain"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-dark-950 text-dark-50`}
       >

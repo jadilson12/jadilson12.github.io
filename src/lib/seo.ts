@@ -26,7 +26,15 @@ export function pageMetadata({
   return {
     title: { absolute: fullTitle },
     description,
-    alternates: { canonical: canonicalUrl(path) },
+    alternates: {
+      canonical: canonicalUrl(path),
+      ...(post && {
+        types: {
+          'text/markdown': new URL(`/blog/${post.slug}/index.md`, site.url)
+            .href,
+        },
+      }),
+    },
     keywords: post?.tags,
     openGraph: {
       type: post ? 'article' : 'website',
