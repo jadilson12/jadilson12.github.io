@@ -54,8 +54,7 @@ const About: React.FC = () => {
     <section
       id="sobre"
       className="section relative overflow-hidden pt-20 sm:pt-24 md:pt-12"
-    >
-      {/* Background elements */}
+    >      {/* Background elements */}
       <div className="absolute inset-0 bg-dots-pattern opacity-10" />
 
       <div className="container-custom relative z-10">
@@ -69,8 +68,7 @@ const About: React.FC = () => {
           <motion.div
             variants={imageVariants}
             className="relative px-4 md:px-0"
-          >
-            <div className="relative z-10 max-w-md mx-auto md:max-w-none">
+          >            <div className="relative z-10 max-w-md mx-auto md:max-w-none">
               {/* Profile image */}
               <motion.div
                 className="relative aspect-square rounded-2xl overflow-hidden bg-dark-800 border-2 md:border-4 border-dark-700 shadow-2xl"
@@ -134,8 +132,7 @@ const About: React.FC = () => {
           <motion.div
             variants={textContainerVariants}
             className="space-y-4 md:space-y-6 px-4 md:px-0"
-          >
-            <div className="space-y-3 md:space-y-4 text-sm md:text-base text-dark-300 leading-relaxed">
+          >            <div className="space-y-3 md:space-y-4 text-sm md:text-base text-dark-300 leading-relaxed">
               <motion.p variants={paragraphVariants}>
                 Engenheiro de Software com{' '}
                 <strong className="text-primary-300">8+ anos</strong> altamente

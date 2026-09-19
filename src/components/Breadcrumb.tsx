@@ -21,7 +21,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
           const isLast = index === items.length - 1;
 
           return (
-            <React.Fragment key={index}>
+            <React.Fragment key={`${item.href ?? ''}-${item.label}`}>
               {index > 0 && (
                 <span className="text-dark-500 flex-shrink-0 select-none" aria-hidden="true">
                   ›

@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Layout from '@/components/Layout';
 import { getSortedPostsData } from '@/lib/posts';
+import { Suspense } from 'react';
 import { pageMetadata, webPageSchema, breadcrumbs } from '@/lib/seo';
 import JsonLd from '@/components/JsonLd';
 import BlogPageClient from './BlogPageClient';
@@ -30,7 +31,9 @@ export default function BlogPage() {
         }}
       />
       <Header />
-      <BlogPageClient posts={posts} />
+      <Suspense fallback={<div className="min-h-screen pt-32 pb-20 flex items-center justify-center"><div className="text-dark-400">Carregando...</div></div>}>
+        <BlogPageClient posts={posts} />
+      </Suspense>
     </Layout>
   );
 }

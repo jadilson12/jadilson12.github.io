@@ -1,6 +1,7 @@
 'use client';
 
 import Breadcrumb from '@/components/Breadcrumb';
+import FloatingTocButton from '@/components/FloatingTocButton';
 import ShareButtons from '@/components/ShareButtons';
 import TableOfContents from '@/components/TableOfContents';
 import { canonicalUrl } from '@/lib/site';
@@ -181,6 +182,9 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({
         </div>
         {/* End container */}
       </article>
+
+      {/* Floating TOC Button for Mobile/Tablet */}
+      <FloatingTocButton />
     </>
   );
 };

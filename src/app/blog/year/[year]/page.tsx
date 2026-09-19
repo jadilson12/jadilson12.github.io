@@ -65,7 +65,7 @@ export default async function YearPage({
   );
 
   // Sort months in descending order
-  const sortedMonths = Object.keys(postsByMonth).sort((a, b) =>
+  const sortedMonths = Object.keys(postsByMonth).toSorted((a, b) =>
     b.localeCompare(a)
   );
 

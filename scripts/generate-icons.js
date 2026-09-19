@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const fs = require('fs');
 const path = require('path');
 
 const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
@@ -40,7 +39,7 @@ try {
   });
   
   console.log('\n✅ Todos os ícones foramgerados com sucesso!');
-} catch (error) {
+} catch {
   console.log('⚠️  rsvg-convert não encontrado.');
   console.log('📝 Você pode instalar com: brew install librsvg');
   console.log('\n💡 Alternativamente, use o arquivo SVG diretamente ou converta manualmente.');

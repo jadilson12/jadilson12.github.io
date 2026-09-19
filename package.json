@@ -17,6 +17,9 @@
     "export": "next build --webpack",
     "deploy:netlify": "yarn build && netlify deploy --prod",
     "deploy:github": "yarn build && gh-pages -d out",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "check:seo": "node scripts/check-seo.mjs",
     "test:llms": "node --test scripts/markdown.test.mjs",
     "check:llms": "node scripts/check-llms.mjs"
@@ -48,17 +51,27 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/mdast": "4.0.4",
     "@types/node": "^24",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^5.0.0",
     "autoprefixer": "^10.5.6",
     "babel-plugin-react-compiler": "^1.0.0",
+    "jsdom": "^30.0.1",
     "oxfmt": "^0.67.0",
     "oxlint": "^1.82.0",
     "postcss": "^8.5.28",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
+    "vite": "^8.0.0",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^5.0.0",
     "webpack": "^5.110.3"
   }
 }

@@ -20,8 +20,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   as: Component = 'p',
   staggerDelay = 0.03,
 }) => {
-  const easing = [0.6, 0.01, 0.05, 0.95];
-
   const variants = {
     fade: {
       hidden: { opacity: 0 },
@@ -101,7 +99,11 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     <Component className={className}>
       <span className="inline-block">
         {characters.map((char, index) => (
+          // The character array is re-created (not reordered) whenever
+          // `children` changes, and characters commonly repeat, so `index`
+          // is needed to keep each key unique.
           <motion.span
+            // oxlint-disable-next-line react/no-array-index-key
             key={`${char}-${index}`}
             variants={selectedVariants}
             initial="hidden"
@@ -135,7 +137,11 @@ export const AnimatedWords: React.FC<AnimatedTextProps> = ({
   return (
     <Component className={className}>
       {words.map((word, index) => (
+        // The word array is re-created (not reordered) whenever `children`
+        // changes, and words commonly repeat, so `index` is needed to keep
+        // each key unique.
         <motion.span
+          // oxlint-disable-next-line react/no-array-index-key
           key={`${word}-${index}`}
           initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
