@@ -8,6 +8,6 @@ describe('About', () => {
   it('renders the bio content', () => {
     render(<About />);
     expect(screen.getByText('Sobre')).toBeInTheDocument();
-    expect(screen.getByText(/20\+ anos/)).toBeInTheDocument();
+    expect(screen.getByText(/mais de/)).toBeInTheDocument();
   });
 });

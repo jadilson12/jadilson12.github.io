@@ -8,41 +8,63 @@ const About: React.FC = () => {
         <div className="space-y-4 text-dark-300 leading-relaxed">
           <p>
             Sou o <strong className="text-white">Jadilson Guedes</strong>,
-            Engenheiro de Software apaixonado por tecnologia. Comecei a
-            trabalhar na área em{' '}
-            <strong className="text-primary-300">2006</strong> e, de lá pra
-            cá, já são <strong className="text-primary-300">20+ anos</strong>{' '}
-            de estrada na profissão. Sou bacharel em Sistemas de Informação e
-            fiz uma Pós-graduação em Arquitetura de Full Cycle. Nesse caminho
-            já passei por Programador, Analista de Sistemas, Arquiteto de
-            Software e DevOps. Atualmente, toco todo o fluxo de um sistema,
-            do zero até colocar em produção.
+            Engenheiro de Software apaixonado por transformar ideias em
+            sistemas que funcionam de verdade. Comecei na área em{' '}
+            <strong className="text-primary-300">2006</strong> e, ao longo de
+            mais de <strong className="text-primary-300">20 anos</strong>,
+            passei por praticamente todos os papéis do ciclo de
+            desenvolvimento: Programador, Analista de Sistemas, Arquiteto de
+            Software e DevOps. Essa vivência me deu uma visão completa de como
+            um produto nasce, cresce e se mantém saudável em produção.
           </p>
 
           <p>
-            Ao longo desse tempo, construí bastante experiência com backend,
-            microsserviços e, mais recentemente, com a integração de modelos
-            de linguagem para criar sistemas de IA mais complexos e
-            contextuais. Também transito bem pelo frontend e por pipelines de
-            integração e entrega contínua — gosto de acompanhar um produto do
-            planejamento até a produção.
+            Hoje, acompanho um sistema de ponta a ponta: entendo o problema,
+            desenho a solução, construo, entrego e sigo cuidando dela depois
+            que está no ar. Para mim, o trabalho só termina quando o usuário
+            está bem atendido, e não quando o código é entregue.
           </p>
 
           <p>
-            Tenho experiência também com containerização e orquestração de
-            sistemas escaláveis, o que facilita deployments e garante
-            escalabilidade. Sigo metodologias ágeis e levo a sério a
-            qualidade do código, com testes automatizados fazendo parte do
-            processo — é o que me dá confiança pra entregar software
-            confiável.
+            Minha base é sólida em backend e microsserviços, com bom trânsito
+            pelo frontend e pelas esteiras de integração e entrega contínua.
+            Tenho também experiência com containerização e orquestração, o
+            que permite construir sistemas escaláveis, com deploys previsíveis
+            e menos sustos.
           </p>
 
           <p>
-            Sou movido pela vontade de fazer bem feito: gosto de me manter
-            atualizado, de aprender coisas novas e de trabalhar em equipe.
-            Acredito que essa combinação de experiência técnica com
-            colaboração é o que faz a diferença em qualquer time de
-            desenvolvimento.
+            Nos últimos anos, tenho me dedicado a integrar modelos de
+            linguagem a sistemas reais, criando soluções de IA mais
+            contextuais e úteis no dia a dia. Me interessa menos a novidade
+            pela novidade e mais o que a IA resolve na prática: melhorar
+            atendimento, ganhar eficiência e abrir possibilidades que antes
+            não existiam.
+          </p>
+
+          <p>
+            Trabalho com metodologias ágeis e levo a qualidade a sério. Testes
+            automatizados fazem parte do processo desde o início, porque é
+            isso que me dá confiança para entregar software confiável e
+            evoluir sem medo de quebrar o que já funciona.
+          </p>
+
+          <p>
+            Sou movido pela vontade de fazer bem feito. Gosto de aprender
+            coisas novas, de me manter atualizado e, principalmente, de
+            trabalhar em equipe: acredito que experiência técnica somada a
+            colaboração é o que separa um time que apenas entrega de um time
+            que entrega bem.
+          </p>
+
+          <p>
+            Sou bacharel em Sistemas de Informação, com pós-graduação em
+            Arquitetura de Full Cycle.
+          </p>
+
+          <p>
+            Estou sempre aberto a conversar sobre arquitetura, IA aplicada e
+            projetos desafiadores.
           </p>
         </div>
       </div>
