@@ -12,18 +12,20 @@ export interface PostData {
   description?: string;
   tags?: string[];
   content?: string;
-  [key: string]: any;
+  updated?: string;
+  language?: string;
+  readingMinutes?: number;
 }
 
 export function getSortedPostsData(): PostData[] {
   if (!fs.existsSync(postsDirectory)) {
     return [];
   }
-  
+
   // Recursively find all MD/MDX files
   const fileNames = getAllFiles(postsDirectory);
-  
-  const allPostsData = fileNames.map((fileName) => {
+
+  const allPostsData = fileNames.map(fileName => {
     // Read markdown file as string
     const fullPath = fileName;
     const fileContents = fs.readFileSync(fullPath, 'utf8');
@@ -42,11 +44,19 @@ export function getSortedPostsData(): PostData[] {
 
     const id = slug;
 
-    return Object.assign({ id, slug }, matterResult.data) as PostData;
+    return {
+      id,
+      slug: slug,
+      ...matterResult.data,
+      readingMinutes: Math.max(
+        1,
+        Math.ceil(matterResult.content.trim().split(/\s+/).length / 220)
+      ),
+    } as PostData;
   });
 
   // Sort posts by date
-  return allPostsData.toSorted((a, b) => {
+  return allPostsData.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
@@ -58,12 +68,12 @@ export function getSortedPostsData(): PostData[] {
 function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
   const files = fs.readdirSync(dirPath);
 
-  files.forEach(function(file) {
-    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
+  files.forEach(function (file) {
+    if (fs.statSync(dirPath + '/' + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + '/' + file, arrayOfFiles);
     } else {
       if (file.endsWith('.md') || file.endsWith('.mdx')) {
-        arrayOfFiles.push(path.join(dirPath, "/", file));
+        arrayOfFiles.push(path.join(dirPath, '/', file));
       }
     }
   });
@@ -74,21 +84,27 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
 export function getPostData(slug: string): PostData {
   // Try to parse YYYY-MM-DD-filename format
   const match = slug.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/);
-  
+
   let fullPath = '';
-  
+
   if (match) {
     const [, year, month, day, filename] = match;
     // Try constructing the path based on the date pattern
-    const possiblePath = path.join(postsDirectory, year, month, day, `${filename}`);
-    
+    const possiblePath = path.join(
+      postsDirectory,
+      year,
+      month,
+      day,
+      `${filename}`
+    );
+
     if (fs.existsSync(`${possiblePath}.md`)) {
       fullPath = `${possiblePath}.md`;
     } else if (fs.existsSync(`${possiblePath}.mdx`)) {
       fullPath = `${possiblePath}.mdx`;
     }
   }
-  
+
   // Fallback: If strict pattern matching fails or file not found, try to find it by iterating
   // This handles cases where the slug might not strictly follow YYYY-MM-DD-name or if the file structure is different
   if (!fullPath) {
@@ -102,14 +118,14 @@ export function getPostData(slug: string): PostData {
         .join('-');
       return generatedSlug === slug;
     });
-    
+
     if (foundFile) {
       fullPath = foundFile;
     }
   }
 
   if (!fullPath || !fs.existsSync(fullPath)) {
-     throw new Error(`Post not found: ${slug}`);
+    throw new Error(`Post not found: ${slug}`);
   }
 
   const fileContents = fs.readFileSync(fullPath, 'utf8');

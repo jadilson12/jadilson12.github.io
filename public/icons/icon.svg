@@ -49,7 +49,7 @@
   <!-- Logo principal: JD estilizado -->
   <g filter="url(#shadow)">
     <!-- J moderno -->
-    <path d="M 140 160 L 140 290 Q 140 340 180 340 L 210 340" 
+    <path d="M 140 160 H 210 V 290 Q 210 335 170 335 Q 130 335 130 295"
           stroke="url(#primaryGradient)" 
           stroke-width="32" 
           stroke-linecap="round" 

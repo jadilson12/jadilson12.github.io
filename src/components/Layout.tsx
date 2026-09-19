@@ -8,7 +8,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, className }) => {
   return (
-    <div className={`min-h-screen bg-dark-900 dark overflow-x-clip w-full ${className || ''}`}>
+    <div
+      className={`min-h-screen bg-dark-900 dark overflow-x-hidden w-full ${className || ''}`}
+    >
       {children}
     </div>
   );

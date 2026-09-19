@@ -15,7 +15,8 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Allow validation builds while the development server is running.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   output: 'export',
   reactCompiler: true,
   allowedDevOrigins: ['192.168.1.40'],

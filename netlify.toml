@@ -1,15 +1,16 @@
 [build]
-  command = "pnpm install && pnpm build"
+  command = "yarn test:llms && yarn build && yarn check:seo && yarn check:llms"
   publish = "out"
 
 [build.environment]
-  NODE_VERSION = "20"
-  PNPM_VERSION = "9"
+  NODE_VERSION = "24"
+  YARN_VERSION = "4.18.0"
+  YARN_FLAGS = "--immutable"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404.html"
+  status = 404
 
 [[headers]]
   for = "/*"
@@ -18,6 +19,24 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Link = '<https://jadilson.dev/llms.txt>; rel="describedby"'
+
+[[headers]]
+  for = "/blog/*/index.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sobre/index.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/llm*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/sw.js"

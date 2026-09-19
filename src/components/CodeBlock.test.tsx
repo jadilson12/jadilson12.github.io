@@ -69,7 +69,7 @@ describe('CodeBlock', () => {
     it('leaves language empty when className does not match the pattern', () => {
       const { container } = render(<CodeBlock className="foo">const x = 1;</CodeBlock>);
       const codeEl = container.querySelector('code');
-      expect(codeEl).toHaveClass('foo');
+      expect(codeEl?.className).toBe('');
       expect(screen.queryByTestId('mermaid-mock')).not.toBeInTheDocument();
     });
   });

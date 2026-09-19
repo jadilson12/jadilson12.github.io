@@ -12,7 +12,6 @@ const Hero: React.FC = () => {
   });
 
   // Simplified parallax effects for better performance
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -57,27 +56,33 @@ const Hero: React.FC = () => {
       <motion.div
         className="container-custom relative z-10"
         variants={containerVariants}
-        initial="hidden"
+        initial={false}
         animate="visible"
-        style={{ opacity }}
       >
         <div className="max-w-4xl mx-auto text-center px-4 py-4">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold mb-3 md:mb-6 leading-tight">
-            Olá, eu sou <GradientText animate={true}>Jadilson Guedes</GradientText>
+            Olá, eu sou{' '}
+            <GradientText animate={true}>Jadilson Guedes</GradientText>
           </h1>
 
           <motion.p
             variants={itemVariants}
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-dark-300 mb-2 md:mb-6 max-w-3xl mx-auto leading-relaxed"
           >
-            Engenheiro de Software com <span className="text-primary-300 font-semibold">8+ anos</span> de experiência
+            Engenheiro de Software com{' '}
+            <span className="text-primary-300 font-semibold">8+ anos</span> de
+            experiência
           </motion.p>
 
           <motion.p
             variants={itemVariants}
             className="text-sm sm:text-base md:text-lg text-dark-400 mb-4 md:mb-8 max-w-2xl mx-auto leading-relaxed"
           >
-            Arquitetando e desenvolvendo <span className="text-primary-300">soluções robustas e escaláveis</span> do código à produção
+            Arquitetando e desenvolvendo{' '}
+            <span className="text-primary-300">
+              soluções robustas e escaláveis
+            </span>{' '}
+            do código à produção
           </motion.p>
 
           <motion.div
@@ -87,11 +92,16 @@ const Hero: React.FC = () => {
             <Link href="/sobre" className="relative group w-full sm:w-auto">
               <motion.div
                 className="btn btn-primary relative overflow-hidden w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center px-6"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(201, 243, 29, 0.3)' }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 0 30px rgba(201, 243, 29, 0.3)',
+                }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
-                <span className="relative z-10 text-sm sm:text-base">Saiba Mais Sobre Mim</span>
+                <span className="relative z-10 text-sm sm:text-base">
+                  Saiba Mais Sobre Mim
+                </span>
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-300"
                   initial={{ x: '-100%' }}
@@ -103,11 +113,16 @@ const Hero: React.FC = () => {
             <Link href="/blog" className="relative group w-full sm:w-auto">
               <motion.div
                 className="btn btn-secondary backdrop-blur-sm relative overflow-hidden w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center px-6"
-                whileHover={{ scale: 1.05, borderColor: 'rgba(201, 243, 29, 0.6)' }}
+                whileHover={{
+                  scale: 1.05,
+                  borderColor: 'rgba(201, 243, 29, 0.6)',
+                }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
-                <span className="relative z-10 text-sm sm:text-base">Ver Blog</span>
+                <span className="relative z-10 text-sm sm:text-base">
+                  Ver Blog
+                </span>
               </motion.div>
             </Link>
           </motion.div>
@@ -125,7 +140,7 @@ const Hero: React.FC = () => {
               <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 Frontend
               </div>
-              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
                 Interfaces visuais inovadoras com experiências imersivas
               </p>
             </motion.div>
@@ -138,7 +153,7 @@ const Hero: React.FC = () => {
               <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 Serviços
               </div>
-              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
                 Arquiteturas distribuídas escaláveis com design robusto
               </p>
             </motion.div>
@@ -151,7 +166,7 @@ const Hero: React.FC = () => {
               <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 IA
               </div>
-              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
                 Sistemas inteligentes que transformam dados em decisões
               </p>
             </motion.div>
@@ -164,7 +179,7 @@ const Hero: React.FC = () => {
               <div className="text-primary-300 text-lg md:text-3xl font-bold mb-1 md:mb-2">
                 DevOps
               </div>
-              <p className="text-dark-400 text-[10px] md:text-sm leading-relaxed">
+              <p className="text-dark-400 text-xs md:text-sm leading-relaxed">
                 Automação de deploy e orquestração para entregas ágeis
               </p>
             </motion.div>

@@ -3,321 +3,270 @@
 import BlogSidebar from '@/components/BlogSidebar';
 import Breadcrumb from '@/components/Breadcrumb';
 import type { PostData } from '@/lib/posts';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface BlogListProps {
   posts: PostData[];
-  selectedDate?: string;
-  selectedTag?: string;
+  query: string;
+  selectedDate: string;
+  selectedTag: string;
+  onSearch: (query: string) => void;
   onDateClick: (date: string) => void;
   onTagClick: (tag: string) => void;
+  onClear: () => void;
   isPending?: boolean;
 }
+const normalize = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 
-const BlogList: React.FC<BlogListProps> = ({
+export default function BlogList({
   posts,
+  query,
   selectedDate,
   selectedTag,
+  onSearch,
   onDateClick,
   onTagClick,
-  isPending = false,
-}) => {
-  const [displayCount, setDisplayCount] = React.useState(10);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const POSTS_PER_LOAD = 10;
-  const loadMoreRef = React.useRef<HTMLDivElement>(null);
-
-  // Filter and sort posts based on selected date and tag
-  const filteredPosts = React.useMemo(() => {
-    let filtered = posts;
-
-    // Apply date filter
-    if (selectedDate) {
-      filtered = filtered.filter((post) => {
-        const date = new Date(post.date);
-        const year = date.getFullYear().toString();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const postDate = `${year}-${month}-${day}`;
-        return postDate === selectedDate;
-      });
-    }
-
-    // Apply tag filter
-    if (selectedTag) {
-      filtered = filtered.filter((post) =>
-        post.tags?.includes(selectedTag)
-      );
-    }
-
-    // Sort by most recent date
-    const sorted = filtered.toSorted((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
-    return sorted;
-  }, [posts, selectedDate, selectedTag]);
-
-  // Reset display count when filters change. Derived during render (per React's
-  // "adjusting state when props change" guidance) instead of in an effect, so we
-  // avoid the extra render/commit an effect-based reset would trigger.
-  const filterKey = `${selectedDate ?? ''}|${selectedTag ?? ''}`;
-  const [prevFilterKey, setPrevFilterKey] = React.useState(filterKey);
-  if (filterKey !== prevFilterKey) {
-    setPrevFilterKey(filterKey);
-    setDisplayCount(POSTS_PER_LOAD);
-  }
-
-  // Get posts to display
+  onClear,
+  isPending,
+}: BlogListProps) {
+  const searchRef = useRef<HTMLInputElement>(null);
+  const filterKey = JSON.stringify([query, selectedDate, selectedTag]);
+  const [pagination, setPagination] = useState({ key: filterKey, count: 10 });
+  const displayCount = pagination.key === filterKey ? pagination.count : 10;
+  useEffect(() => {
+    if (searchRef.current) searchRef.current.value = query;
+  }, [query]);
+  const filteredPosts = posts.filter(
+    post =>
+      (!selectedDate || post.date.slice(0, 10) === selectedDate) &&
+      (!selectedTag || post.tags?.includes(selectedTag)) &&
+      (!query ||
+        normalize(
+          `${post.title} ${post.description || ''} ${post.tags?.join(' ') || ''}`
+        ).includes(normalize(query.trim())))
+  );
+  const tags = [...new Set(posts.flatMap(post => post.tags || []))].sort();
+  const years = [...new Set(posts.map(post => post.date.slice(0, 4)))]
+    .sort()
+    .reverse();
+  const hasFilters = Boolean(query || selectedDate || selectedTag);
   const displayedPosts = filteredPosts.slice(0, displayCount);
-  const hasMore = displayCount < filteredPosts.length;
-
-  // Infinite scroll with Intersection Observer
-  React.useEffect(() => {
-    const currentRef = loadMoreRef.current;
-    if (!currentRef || !hasMore || isLoading) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting && !isLoading) {
-          setIsLoading(true);
-          // Simulate loading delay for smoother UX
-          setTimeout(() => {
-            setDisplayCount((prev) => prev + POSTS_PER_LOAD);
-            setIsLoading(false);
-          }, 500);
-        }
-      },
-      {
-        root: null,
-        rootMargin: '200px', // Load more when 200px before reaching the end
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(currentRef);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [hasMore, isLoading]);
 
   return (
-    <div className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
-      <div className="container-custom max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="min-h-screen pb-20 pt-24 md:pt-32"
+    >
+      <div className="container-custom">
         <Breadcrumb
-          items={[
-            { label: 'Home', href: '/' },
-            { label: 'Blog' },
-          ]}
+          items={[{ label: 'Início', href: '/' }, { label: 'Blog' }]}
         />
-
-        {/* Main Layout with Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Blog Posts - Left Side */}
-          <div className="lg:col-span-8">
-            {/* Active Filters */}
-            {(selectedDate || selectedTag) && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-dark-800 rounded-lg"
-              >
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-dark-300 text-sm">Filtros ativos:</span>
-                  {selectedDate && (
-                    <span className="px-3 py-1 text-sm bg-primary-300 text-dark-950 rounded-full flex items-center gap-2">
-                      📅 {new Date(selectedDate).toLocaleDateString('pt-BR')}
-                    </span>
-                  )}
-                  {selectedTag && (
-                    <span className="px-3 py-1 text-sm bg-primary-300 text-dark-950 rounded-full flex items-center gap-2">
-                      🏷️ {selectedTag}
-                    </span>
-                  )}
-                  <span className="text-dark-400 text-sm ml-auto">
-                    {filteredPosts.length} {filteredPosts.length === 1 ? 'post encontrado' : 'posts encontrados'}
-                  </span>
+        <h1 className="mb-2 text-3xl font-bold md:text-4xl">Blog</h1>
+        <p className="mb-6 text-dark-200">
+          Desenvolvimento, arquitetura e tecnologia na prática.
+        </p>
+        <div className="mb-6 rounded-xl border border-dark-700 bg-dark-900 p-4">
+          <search>
+            <form
+              className="grid items-end gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]"
+              onSubmit={event => {
+                event.preventDefault();
+                const data = new FormData(event.currentTarget);
+                onSearch(String(data.get('q') || ''));
+              }}
+            >
+              <div className="min-w-0 sm:col-span-2 xl:col-span-1">
+                <label
+                  htmlFor="blog-search"
+                  className="mb-2 block text-sm font-medium"
+                >
+                  Buscar artigos
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="blog-search"
+                    ref={searchRef}
+                    name="q"
+                    type="search"
+                    defaultValue={query}
+                    placeholder="Título, assunto ou tecnologia"
+                    className="min-h-11 min-w-0 flex-1 rounded-lg border border-dark-600 bg-dark-800 px-3 text-base text-white"
+                  />
+                  <button type="submit" className="btn btn-primary min-h-11">
+                    Buscar
+                  </button>
                 </div>
-              </motion.div>
-            )}
-
-            {/* Blog Posts Grid with React 19 useTransition feedback */}
-            <div className={`grid grid-cols-1 gap-6 transition-opacity duration-200 ${isPending ? 'opacity-60' : 'opacity-100'}`}>
-              {displayedPosts.map((post, index) => (
-                <motion.article
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                >
-                  <Link href={`/blog/${post.slug}`}>
-                    <motion.div
-                      className="card card-hover overflow-hidden h-full flex flex-col cursor-pointer group"
-                      whileHover={{ y: -4 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {/* Content */}
-                      <div className="p-6 flex-1 flex flex-col">
-                        {/* Author Info */}
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full border-2 border-dark-700 bg-dark-800 overflow-hidden relative flex-shrink-0">
-                            <Image
-                              src="https://github.com/jadilson12.png"
-                              alt="Jadilson Guedes"
-                              width={48}
-                              height={48}
-                              className="object-cover"
-                              priority
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-white font-medium text-sm">Jadilson Guedes</h3>
-                            <time className="text-primary-300 text-xs">
-                              {new Date(post.date).toLocaleDateString('pt-BR', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                              })}
-                            </time>
-                          </div>
-                        </div>
-
-                        {/* Title */}
-                        <h2 className="text-xl font-bold text-white mb-3 group-hover:text-primary-300 transition-colors duration-200 line-clamp-2">
-                          {post.title}
-                        </h2>
-
-                        {/* Description */}
-                        <p className="text-dark-300 text-sm mb-4 flex-grow line-clamp-2">
-                          {post.description}
-                        </p>
-
-                        {/* Tags */}
-                        {post.tags && post.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {post.tags.slice(0, 4).map((tag) => (
-                              <span
-                                key={tag}
-                                className="px-2.5 py-1 text-xs bg-dark-800 text-dark-300 rounded-md border border-dark-700"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Footer with Read More */}
-                        <div className="flex items-center justify-between pt-4 border-t border-dark-800">
-                          <motion.div
-                            className="flex items-center gap-2 text-primary-300 font-medium text-sm"
-                            whileHover={{ x: 5 }}
-                          >
-                            <span>Ler artigo</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                          </motion.div>
-
-                          {/* Reading time estimate (optional) */}
-                          <span className="text-dark-400 text-xs">
-                            {Math.ceil((post.description?.length || 0) / 200)} min leitura
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </Link>
-                </motion.article>
-              ))}
-            </div>
-
-            {/* Infinite Scroll Trigger */}
-            {hasMore && (
-              <div ref={loadMoreRef} className="mt-8 flex justify-center py-4">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center gap-2 text-dark-400"
-                >
-                  <svg
-                    className="w-5 h-5 animate-spin"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
-                  <span className="text-sm">Carregando mais posts...</span>
-                </motion.div>
               </div>
-            )}
-
-            {/* End of Posts Message */}
-            {!hasMore && filteredPosts.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="mt-8 text-center py-8 border-t border-dark-800"
+              <div className="min-w-0 flex-1 basis-40">
+                <label
+                  htmlFor="blog-tag"
+                  className="mb-2 block text-sm font-medium"
+                >
+                  Assunto
+                </label>
+                <select
+                  id="blog-tag"
+                  value={selectedTag}
+                  onChange={event => onTagClick(event.target.value)}
+                  className="min-h-11 w-full rounded-lg border border-dark-600 bg-dark-800 px-3 text-base"
+                >
+                  <option value="">Todos os assuntos</option>
+                  {tags.map(tag => (
+                    <option key={tag} value={tag}>
+                      {tag}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="min-w-0 flex-1 basis-40">
+                <label
+                  htmlFor="blog-date"
+                  className="mb-2 block text-sm font-medium"
+                >
+                  Data de publicação
+                </label>
+                <input
+                  id="blog-date"
+                  type="date"
+                  value={selectedDate}
+                  onChange={event => onDateClick(event.target.value)}
+                  className="min-h-11 w-full rounded-lg border border-dark-600 bg-dark-800 px-3 text-base [color-scheme:dark]"
+                />
+              </div>
+            </form>
+          </search>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+            <output aria-live="polite" className="text-sm text-dark-200">
+              {isPending
+                ? 'Atualizando…'
+                : `${filteredPosts.length} ${filteredPosts.length === 1 ? 'artigo encontrado' : 'artigos encontrados'}`}
+            </output>
+            {hasFilters && (
+              <button
+                type="button"
+                onClick={onClear}
+                className="min-h-11 rounded-lg px-3 text-sm text-primary-300 hover:bg-dark-800"
               >
-                <p className="text-dark-400 text-sm">
-                  Você chegou ao fim! 🎉 Total de {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
-                </p>
-              </motion.div>
-            )}
-
-            {/* Empty State */}
-            {filteredPosts.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-center py-20"
-              >
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-dark-800 mb-6">
-                  <svg className="w-10 h-10 text-dark-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {selectedDate || selectedTag ? 'Nenhum post encontrado' : 'Nenhum post ainda'}
-                </h3>
-                <p className="text-dark-400">
-                  {selectedDate || selectedTag
-                    ? 'Tente ajustar os filtros para ver mais resultados'
-                    : 'Volte em breve para novo conteúdo!'}
-                </p>
-              </motion.div>
+                Limpar filtros
+              </button>
             )}
           </div>
-
-          {/* Sidebar - Right Side */}
-          <aside className="lg:col-span-4 order-last">
-            <div className="lg:sticky lg:top-24">
-              <BlogSidebar
-                posts={posts}
-                selectedDate={selectedDate}
-                selectedTag={selectedTag}
-                onDateClick={onDateClick}
-                onTagClick={onTagClick}
-              />
+        </div>
+        <details className="mb-6 rounded-lg border border-dark-700 p-3 lg:hidden">
+          <summary className="cursor-pointer py-2 font-medium">
+            Arquivo por ano
+          </summary>
+          <nav
+            aria-label="Arquivo por ano"
+            className="mt-2 flex flex-wrap gap-2"
+          >
+            {years.map(year => (
+              <Link
+                key={year}
+                href={`/blog/year/${year}`}
+                className="rounded-lg bg-dark-800 px-4 py-3 text-primary-300"
+              >
+                {year}
+              </Link>
+            ))}
+          </nav>
+        </details>
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div className="min-w-0 lg:col-span-8" aria-busy={isPending}>
+            <div className="grid gap-5">
+              {displayedPosts.map(post => (
+                <article key={post.id} className="card card-hover">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="block rounded-2xl p-5 md:p-6"
+                  >
+                    <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-dark-300">
+                      <span>Jadilson Guedes</span>
+                      <time dateTime={post.date}>
+                        {new Date(post.date).toLocaleDateString('pt-BR', {
+                          timeZone: 'UTC',
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </time>
+                    </div>
+                    <h2 className="mb-3 text-xl font-bold leading-snug text-white">
+                      {post.title}
+                    </h2>
+                    <p className="mb-4 text-sm leading-relaxed text-dark-200">
+                      {post.description}
+                    </p>
+                    <div className="mb-4 flex flex-wrap gap-2">
+                      {post.tags?.slice(0, 4).map(tag => (
+                        <span
+                          key={tag}
+                          className="rounded-md bg-dark-800 px-2 py-1 text-xs text-dark-200"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between gap-3 border-t border-dark-800 pt-3 text-sm">
+                      <span className="font-medium text-primary-300">
+                        Ler artigo →
+                      </span>
+                      <span className="text-dark-300">
+                        {post.readingMinutes || 1} min de leitura
+                      </span>
+                    </div>
+                  </Link>
+                </article>
+              ))}
             </div>
+            {displayCount < filteredPosts.length && (
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() =>
+                    setPagination({ key: filterKey, count: displayCount + 10 })
+                  }
+                >
+                  Carregar mais artigos ({filteredPosts.length - displayCount})
+                </button>
+              </div>
+            )}
+            {filteredPosts.length === 0 && (
+              <div className="rounded-xl border border-dark-700 px-4 py-12 text-center">
+                <h2 className="mb-2 text-xl font-semibold">
+                  Nenhum artigo encontrado
+                </h2>
+                <p className="mb-4 text-dark-200">
+                  Tente outro termo ou remova os filtros.
+                </p>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={onClear}
+                >
+                  Ver todos os artigos
+                </button>
+              </div>
+            )}
+          </div>
+          <aside className="hidden min-w-0 lg:col-span-4 lg:block">
+            <BlogSidebar
+              posts={posts}
+              selectedDate={selectedDate}
+              selectedTag={selectedTag}
+              onDateClick={onDateClick}
+              onTagClick={onTagClick}
+            />
           </aside>
         </div>
       </div>
-    </div>
+    </main>
   );
-};
-
-export default BlogList;
+}

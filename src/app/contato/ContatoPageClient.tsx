@@ -1,10 +1,12 @@
 'use client';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 
-const ContatoPageClient = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+const ContatoPageClient = ({
+  headingLevel = 'h1',
+}: {
+  headingLevel?: 'h1' | 'h2';
+}) => {
+  const Heading = headingLevel;
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -49,142 +51,141 @@ const ContatoPageClient = () => {
   ];
 
   return (
-    <section id="contato" className="snap-section relative overflow-hidden bg-dark-950 flex items-center justify-center">
-        {/* Background elements */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+    <section
+      id="contato"
+      className="snap-section relative overflow-hidden bg-dark-950 flex items-center justify-center"
+    >
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-300/10 rounded-full blur-3xl"
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+        }}
+      />
+
+      <div className="container-custom relative z-10">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-300/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-          }}
-        />
+          variants={containerVariants}
+          initial={false}
+          animate="visible"
+          className="max-w-4xl mx-auto"
+        >
+          {/* Header */}
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <Heading className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
+              Vamos <span className="text-primary-300">Conversar</span>?
+            </Heading>
+            <p className="text-lg md:text-xl text-dark-300 max-w-2xl mx-auto leading-relaxed">
+              Tem um projeto em mente? Quer discutir sobre tecnologia? Estou
+              sempre aberto para novas conversas e oportunidades!
+            </p>
+          </motion.div>
 
-        <div className="container-custom relative z-10">
-          <motion.div
-            ref={ref}
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="max-w-4xl mx-auto"
-          >
-            {/* Header */}
-            <motion.div variants={itemVariants} className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
-                Vamos <span className="text-primary-300">Conversar</span>?
-              </h1>
-              <p className="text-lg md:text-xl text-dark-300 max-w-2xl mx-auto leading-relaxed">
-                Tem um projeto em mente? Quer discutir sobre tecnologia? Estou sempre
-                aberto para novas conversas e oportunidades!
+          {/* Email Card */}
+          <motion.div variants={itemVariants} className="mb-12">
+            <div className="card p-8 md:p-10 text-center card-hover">
+              <div className="mb-4">
+                <svg
+                  className="w-16 h-16 mx-auto text-primary-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                E-mail
+              </h2>
+              <a
+                href="mailto:contato@jadilson.dev"
+                className="text-xl md:text-2xl text-primary-300 hover:text-primary-400 transition-colors duration-200 break-all"
+              >
+                contato@jadilson.dev
+              </a>
+              <p className="text-dark-400 mt-4">
+                Respondo geralmente em até 24 horas
               </p>
-            </motion.div>
+            </div>
+          </motion.div>
 
-            {/* Email Card */}
-            <motion.div variants={itemVariants} className="mb-12">
-              <div className="card p-8 md:p-10 text-center card-hover">
-                <div className="mb-4">
+          {/* Social Links */}
+          <motion.div variants={itemVariants}>
+            <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-8">
+              Me Siga nas Redes Sociais
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {socialLinks.map((social, index) => (
+                <motion.a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`card p-8 text-center card-hover ${social.color} transition-all duration-300`}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+                >
                   <svg
-                    className="w-16 h-16 mx-auto text-primary-300"
-                    fill="none"
-                    stroke="currentColor"
+                    className="w-12 h-12 mx-auto mb-4 text-primary-300"
+                    fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
+                    <path d={social.icon} />
                   </svg>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                  E-mail
-                </h2>
-                <a
-                  href="mailto:contato@jadilson.dev"
-                  className="text-xl md:text-2xl text-primary-300 hover:text-primary-400 transition-colors duration-200 break-all"
-                >
-                  contato@jadilson.dev
-                </a>
-                <p className="text-dark-400 mt-4">
-                  Respondo geralmente em até 24 horas
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Social Links */}
-            <motion.div variants={itemVariants}>
-              <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-8">
-                Me Siga nas Redes Sociais
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`card p-8 text-center card-hover ${social.color} transition-all duration-300`}
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-                  >
-                    <svg
-                      className="w-12 h-12 mx-auto mb-4 text-primary-300"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d={social.icon} />
-                    </svg>
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {social.name}
-                    </h3>
-                    <p className="text-dark-400 text-sm">@jadilson12</p>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* CTA Bottom */}
-            <motion.div
-              variants={itemVariants}
-              className="mt-12 text-center"
-            >
-              <p className="text-lg text-dark-300 mb-6">
-                Prefere uma conversa rápida? Me chame em qualquer rede social!
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <motion.a
-                  href="https://www.linkedin.com/in/jadilson12/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Conectar no LinkedIn
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {social.name}
+                  </h3>
+                  <p className="text-dark-400 text-sm">@jadilson12</p>
                 </motion.a>
-                <motion.a
-                  href="https://github.com/jadilson12"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-secondary"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Ver GitHub
-                </motion.a>
-              </div>
-            </motion.div>
+              ))}
+            </div>
           </motion.div>
-        </div>
-      </section>
+
+          {/* CTA Bottom */}
+          <motion.div variants={itemVariants} className="mt-12 text-center">
+            <p className="text-lg text-dark-300 mb-6">
+              Prefere uma conversa rápida? Me chame em qualquer rede social!
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <motion.a
+                href="https://www.linkedin.com/in/jadilson12/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Conectar no LinkedIn
+              </motion.a>
+              <motion.a
+                href="https://github.com/jadilson12"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Ver GitHub
+              </motion.a>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 

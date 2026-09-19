@@ -56,10 +56,12 @@ describe('generateStaticParams', () => {
 describe('generateMetadata', () => {
   it('returns title and description templated with the year', async () => {
     const result = await generateMetadata({ params: Promise.resolve({ year: '2024' }) });
-    expect(result).toEqual({
-      title: 'Posts de 2024 | Jadilson Guedes',
-      description: 'Todos os artigos publicados em 2024',
-    });
+    expect((result.title as { absolute: string }).absolute).toBe(
+      'Posts de 2024 | Jadilson Guedes'
+    );
+    expect(result.description).toBe(
+      'Todos os artigos publicados em 2024 por Jadilson Guedes sobre programação e tecnologia.'
+    );
   });
 });
 

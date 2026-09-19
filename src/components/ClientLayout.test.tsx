@@ -5,7 +5,7 @@ import ClientLayout from './ClientLayout';
 afterEach(cleanup);
 
 describe('ClientLayout', () => {
-  it('renders children and the ScrollToTop button', () => {
+  it('renders children', () => {
     render(
       <ClientLayout>
         <p>page content</p>
@@ -13,7 +13,6 @@ describe('ClientLayout', () => {
     );
 
     expect(screen.getByText('page content')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /voltar ao topo/i })).toBeInTheDocument();
   });
 
   describe('window error handler', () => {

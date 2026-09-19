@@ -24,6 +24,8 @@ describe('SobrePage', () => {
   });
 
   it('exports expected metadata', () => {
-    expect(metadata.title).toBe('Sobre - Jadilson Guedes');
+    expect((metadata.title as { absolute: string }).absolute).toBe(
+      'Sobre | Jadilson Guedes'
+    );
   });
 });

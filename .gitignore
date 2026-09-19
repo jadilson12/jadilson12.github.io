@@ -4,6 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/cache/
+.yarn/install-state.gz
+.yarn/unplugged/
+*.tsbuildinfo
 
 # yarn berry
 .yarn/*
@@ -71,3 +75,5 @@ CLAUDE.md
 DEPLOYMENT.md
 .playwright-mcp
 .ai-jail
+
+/.next-validation/

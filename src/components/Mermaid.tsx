@@ -45,21 +45,16 @@ const Mermaid: React.FC<MermaidProps> = ({ chart }) => {
     if (containerRef.current && chart) {
       const renderChart = async () => {
         try {
-          console.log('Rendering mermaid chart:', chart);
           const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
           const { svg } = await mermaid.render(id, chart);
           if (containerRef.current) {
             containerRef.current.innerHTML = svg;
-            console.log('Mermaid chart rendered successfully');
           }
         } catch (error) {
           console.error('Error rendering mermaid chart:', error);
-          console.log('Failed chart content:', chart);
           if (containerRef.current) {
-            containerRef.current.innerHTML = `<div class="mermaid-error" style="color: #ef4444; background: #1a1a1a; padding: 1rem; border-radius: 0.5rem; border: 1px solid #404040;">
-<strong>Erro ao renderizar diagrama Mermaid:</strong><br />
-${error instanceof Error ? error.message : 'Erro desconhecido'}
-</div>`;
+            containerRef.current.textContent =
+              'Não foi possível exibir este diagrama. Recarregue a página para tentar novamente.';
           }
         }
       };

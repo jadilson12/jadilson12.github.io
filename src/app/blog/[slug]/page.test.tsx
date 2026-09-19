@@ -36,10 +36,10 @@ vi.mock('./BlogPostContent', () => ({
 }));
 let capturedComponents: any;
 vi.mock('next-mdx-remote/rsc', () => ({
-  MDXRemote: (props: any) => {
-    capturedComponents = props.components;
-    return <div data-testid="mdx-remote">{props.source}</div>;
-  },
+  compileMDX: vi.fn(async ({ source, components }: any) => {
+    capturedComponents = components;
+    return { content: <div data-testid="mdx-remote">{source}</div> };
+  }),
 }));
 vi.mock('@/components/CodeBlock', () => ({ default: (props: any) => <div {...props} /> }));
 vi.mock('@/components/DecisionGraph', () => ({ default: (props: any) => <div {...props} /> }));
@@ -68,10 +68,10 @@ describe('generateMetadata', () => {
     vi.mocked(getPostData).mockReturnValue(makePost({ title: 'Meta Title', description: 'Meta Desc' }));
 
     const result = await generateMetadata({ params: Promise.resolve({ slug: 'my-post' }) });
-    expect(result).toEqual({
-      title: 'Meta Title | Jadilson Guedes',
-      description: 'Meta Desc',
-    });
+    expect((result.title as { absolute: string }).absolute).toBe(
+      'Meta Title | Jadilson Guedes'
+    );
+    expect(result.description).toBe('Meta Desc');
   });
 });
 
@@ -88,31 +88,11 @@ describe('BlogPost', () => {
     const jsx = await BlogPost({ params: Promise.resolve({ slug: 'my-post' }) });
     const { container } = render(jsx);
 
-    // Note: React 19's native <title> hoisting only reliably sets textContent
-    // for a single text child; this title has two children (expression + literal),
-    // so jsdom renders an empty <title> element. We only assert it exists.
-    const title = document.querySelector('title');
-    expect(title).toBeInTheDocument();
-
-    const description = document.querySelector('meta[name="description"]');
-    expect(description).toHaveAttribute('content', 'Tagged description');
-
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    expect(ogTitle).toHaveAttribute('content', 'Tagged Post');
-
-    const ogDescription = document.querySelector('meta[property="og:description"]');
-    expect(ogDescription).toHaveAttribute('content', 'Tagged description');
-
-    const ogType = document.querySelector('meta[property="og:type"]');
-    expect(ogType).toHaveAttribute('content', 'article');
-
-    const publishedTime = document.querySelector('meta[property="article:published_time"]');
-    expect(publishedTime).toHaveAttribute('content', new Date('2024-06-15').toISOString());
-
-    const tagMetas = document.querySelectorAll('meta[property="article:tag"]');
-    expect(tagMetas).toHaveLength(2);
-    expect(tagMetas[0]).toHaveAttribute('content', 'react');
-    expect(tagMetas[1]).toHaveAttribute('content', 'nextjs');
+    const jsonLd = container.querySelector('script[type="application/ld+json"]');
+    const schema = JSON.parse(jsonLd?.innerHTML || '{}');
+    const article = schema['@graph'].find((node: any) => node['@type'] === 'BlogPosting');
+    expect(article.keywords).toBe('react, nextjs');
+    expect(article.datePublished).toBe('2024-06-15');
 
     expect(container.querySelector('[data-testid="header"]')).toBeInTheDocument();
     const content = container.querySelector('[data-testid="blog-post-content"]');
@@ -130,10 +110,12 @@ describe('BlogPost', () => {
     }));
 
     const jsx = await BlogPost({ params: Promise.resolve({ slug: 'no-tags-post' }) });
-    render(jsx);
+    const { container } = render(jsx);
 
-    const tagMetas = document.querySelectorAll('meta[property="article:tag"]');
-    expect(tagMetas).toHaveLength(0);
+    const jsonLd = container.querySelector('script[type="application/ld+json"]');
+    const schema = JSON.parse(jsonLd?.innerHTML || '{}');
+    const article = schema['@graph'].find((node: any) => node['@type'] === 'BlogPosting');
+    expect(article.keywords).toBeUndefined();
   });
 
   it('defaults MDXRemote source to an empty string when post.content is falsy', async () => {
@@ -196,11 +178,10 @@ describe('MDX components map (pre/code renderers)', () => {
     expect(result.props.children).toBe('just text');
   });
 
-  it('pre renderer falls back to a native <pre> when children is a valid element but not of type code', () => {
+  it('pre renderer treats any valid element child as a code-like element (MDX always supplies <code>)', () => {
     const spanElement = React.createElement('span', {}, 'hi');
-    const result = capturedComponents.pre({ children: spanElement, someProp: 'val' });
-    expect(result.type).toBe('pre');
-    expect(result.props.someProp).toBe('val');
-    expect(result.props.children).toBe(spanElement);
+    const result = capturedComponents.pre({ children: spanElement });
+    expect(result.type).toBe(CodeBlock);
+    expect(result.props.children).toBe('hi');
   });
 });

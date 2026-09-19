@@ -55,23 +55,15 @@ describe('BlogPage', () => {
     expect(getByTestId('blog-page-client').getAttribute('data-count')).toBe('0');
   });
 
-  it('renders title and meta description tags', () => {
-    getSortedPostsDataMock.mockReturnValue([]);
-
-    render(<BlogPage />);
-
-    // React 19 hoists <title>/<meta> rendered by a component into the document head.
-    const title = document.querySelector('title');
-    expect(title?.textContent).toBe('Blog | Jadilson Guedes');
-
-    const description = document.querySelector('meta[name="description"]');
-    expect(description).toHaveAttribute(
-      'content',
-      'Artigos sobre desenvolvimento web, programação e tecnologia por Jadilson Guedes'
+  it('exports metadata with the expected title', () => {
+    expect((metadata.title as { absolute: string }).absolute).toBe(
+      'Blog | Jadilson Guedes'
     );
   });
 
-  it('exports metadata with the expected title', () => {
-    expect(metadata.title).toBe('Blog | Jadilson Guedes');
+  it('exports metadata with the expected description', () => {
+    expect(metadata.description).toBe(
+      'Artigos sobre desenvolvimento web, programação e tecnologia por Jadilson Guedes.'
+    );
   });
 });

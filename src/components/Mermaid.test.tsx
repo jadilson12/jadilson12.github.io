@@ -43,24 +43,26 @@ describe('Mermaid', () => {
     expect(mermaid.render).not.toHaveBeenCalled();
   });
 
-  it('renders an error block with the Error message when mermaid.render rejects with an Error', async () => {
+  it('renders a fallback message when mermaid.render rejects with an Error', async () => {
     vi.mocked(mermaid.render).mockRejectedValueOnce(new Error('boom'));
     const { container } = render(<Mermaid chart="graph TD; A-->B" />);
 
     await waitFor(() => {
-      expect(container.querySelector('.mermaid-error')).not.toBeNull();
+      expect(container.querySelector('.mermaid-container')?.textContent).toContain(
+        'Não foi possível exibir este diagrama'
+      );
     });
-    expect(container.querySelector('.mermaid-container')?.innerHTML).toContain('boom');
   });
 
-  it('renders a generic error message when mermaid.render rejects with a non-Error value', async () => {
+  it('renders a fallback message when mermaid.render rejects with a non-Error value', async () => {
     vi.mocked(mermaid.render).mockRejectedValueOnce('oops');
     const { container } = render(<Mermaid chart="graph TD; A-->B" />);
 
     await waitFor(() => {
-      expect(container.querySelector('.mermaid-error')).not.toBeNull();
+      expect(container.querySelector('.mermaid-container')?.textContent).toContain(
+        'Não foi possível exibir este diagrama'
+      );
     });
-    expect(container.querySelector('.mermaid-container')?.innerHTML).toContain('Erro desconhecido');
   });
 
   it('does not touch the container when the component unmounts before a successful render resolves', async () => {

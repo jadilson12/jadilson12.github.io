@@ -222,19 +222,19 @@ describe('BlogSidebar', () => {
       makePost({ id: 'a', slug: 'post-a', date: postDateIso, title: 'Post A' }),
     ];
 
-    // Compute the dateKey the same way BlogSidebar does (using local Date
+    // Compute the dateKey the same way BlogSidebar does (using UTC Date
     // getters on a date-only ISO string), so this test is not sensitive to
     // the machine's timezone shifting the local day/month.
     const d = new Date(postDateIso);
-    const year = d.getFullYear().toString();
-    const month = (d.getMonth() + 1).toString().padStart(2, '0');
-    const day = d.getDate().toString().padStart(2, '0');
+    const year = d.getUTCFullYear().toString();
+    const month = (d.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = d.getUTCDate().toString().padStart(2, '0');
     const selectedDate = `${year}-${month}-${day}`;
     const monthNames = [
       'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
     ];
-    const monthName = monthNames[d.getMonth()];
+    const monthName = monthNames[d.getUTCMonth()];
 
     render(
       <BlogSidebar

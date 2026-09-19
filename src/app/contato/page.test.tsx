@@ -24,6 +24,8 @@ describe('ContatoPage', () => {
   });
 
   it('exports expected metadata', () => {
-    expect(metadata.title).toBe('Contato - Jadilson Guedes');
+    expect((metadata.title as { absolute: string }).absolute).toBe(
+      'Contato | Jadilson Guedes'
+    );
   });
 });

@@ -40,7 +40,9 @@ describe('RootLayout', () => {
 
 describe('metadata and viewport', () => {
   it('exports expected metadata fields', () => {
-    expect(metadata.title).toBe('Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps');
+    expect((metadata.title as { default: string }).default).toBe(
+      'Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps'
+    );
   });
 
   it('exports expected viewport fields', () => {

@@ -2,13 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-};
-
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -29,11 +22,22 @@ const ScrollToTop = () => {
     };
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth',
+    });
+  };
+
+  if (!isVisible) return null;
+
   return (
     <button
       onClick={scrollToTop}
       className={`
-        fixed bottom-8 right-8 z-50
+        fixed bottom-5 right-4 z-30
         p-3 rounded-full
         bg-primary-300 hover:bg-primary-400
         text-dark-950

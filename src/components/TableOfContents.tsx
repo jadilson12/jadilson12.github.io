@@ -1,124 +1,100 @@
 'use client';
-import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
 
-interface TocItem {
-  id: string;
-  text: string;
-  level: number;
-}
+import { useEffect, useState } from 'react';
+import type { TocItem } from '@/lib/headings';
+import Modal from './Modal';
 
-const TableOfContents: React.FC = () => {
-  const [headings, setHeadings] = useState<TocItem[]>([]);
-  const [activeId, setActiveId] = useState<string>('');
+export default function TableOfContents({ headings }: { headings: TocItem[] }) {
+  const [activeId, setActiveId] = useState('');
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    // Extract all h2 and h3 headings from the article
-    const article = document.querySelector('article');
-    if (!article) return;
-
-    const elements = article.querySelectorAll('h2, h3');
-    const items: TocItem[] = Array.from(elements).map((element) => {
-      // Create ID if it doesn't exist
-      if (!element.id) {
-        element.id = element.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') || '';
-      }
-
-      return {
-        id: element.id,
-        text: element.textContent || '',
-        level: parseInt(element.tagName.substring(1)),
-      };
-    });
-
-    // This effect synchronizes React with two external systems (the DOM
-    // headings rendered by the MDX article content, and an IntersectionObserver
-    // subscription) that can't be read during render, so `setState` here isn't
-    // the "derive state from props" anti-pattern the rule otherwise guards
-    // against.
-    // oxlint-disable-next-line react/set-state-in-effect
-    setHeadings(items);
-
-    // Intersection Observer to track active section
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
+      entries => {
+        for (const entry of entries)
+          if (entry.isIntersecting) setActiveId(entry.target.id);
       },
-      {
-        rootMargin: '-80px 0px -80% 0px',
-      }
+      { rootMargin: '-96px 0px -65% 0px' }
     );
-
-    elements.forEach((element) => observer.observe(element));
-
-    return () => {
-      elements.forEach((element) => observer.unobserve(element));
-    };
-  }, []);
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 100; // Account for fixed header
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-
-      // Update URL with hash
-      window.history.pushState(null, '', `#${id}`);
-
-      // Update active ID manually
-      setActiveId(id);
+    for (const heading of headings) {
+      const element = document.getElementById(heading.id);
+      if (element) observer.observe(element);
     }
-  };
+    return () => observer.disconnect();
+  }, [headings]);
 
-  if (headings.length === 0) return null;
+  if (!headings.length) return null;
+  function items() {
+    return (
+      <ul className="space-y-1">
+        {headings.map(heading => (
+          <li key={heading.id} className={heading.level === 3 ? 'ml-3' : ''}>
+            <a
+              href={`#${heading.id}`}
+              aria-current={activeId === heading.id ? 'location' : undefined}
+              onClick={event => {
+                if (
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey
+                )
+                  return;
+                event.preventDefault();
+                setOpen(false);
+                setActiveId(heading.id);
+                // Wait for the modal to release the scroll lock before navigating.
+                requestAnimationFrame(() => {
+                  window.history.pushState(null, '', `#${heading.id}`);
+                  const element = document.getElementById(heading.id);
+                  element?.focus({ preventScroll: true });
+                  element?.scrollIntoView({
+                    behavior: window.matchMedia(
+                      '(prefers-reduced-motion: reduce)'
+                    ).matches
+                      ? 'instant'
+                      : 'smooth',
+                  });
+                });
+              }}
+              className={`block rounded-md border-l-2 px-3 py-2 text-sm ${activeId === heading.id ? 'border-primary-300 bg-dark-800 text-primary-300' : 'border-dark-700 text-dark-200 hover:bg-dark-800'}`}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    );
+  }
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
-      className="hidden xl:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
-    >
-      <div className="w-64 p-6 bg-dark-800 border border-dark-700 rounded-xl">
-        <h2 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-4">
-          Neste Artigo
-        </h2>
-        <ul className="space-y-2">
-          {headings.map((heading) => (
-            <li
-              key={heading.id}
-              className={heading.level === 3 ? 'ml-4' : ''}
-            >
-              <a
-                href={`#${heading.id}`}
-                onClick={(e) => handleClick(e, heading.id)}
-                className={`
-                  block text-sm py-1 border-l-2 pl-3 transition-all duration-200
-                  ${activeId === heading.id
-                    ? 'border-primary-300 text-primary-300 font-medium'
-                    : 'border-dark-700 text-dark-300 hover:border-dark-600 hover:text-dark-200'
-                  }
-                `}
-              >
-                {heading.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </motion.nav>
+    <>
+      <nav
+        aria-label="Índice do artigo"
+        className="sticky top-24 hidden max-h-[calc(100dvh-7rem)] w-64 shrink-0 overflow-y-auto rounded-xl border border-dark-700 bg-dark-900 p-4 xl:block"
+      >
+        <p className="mb-3 font-semibold">Neste artigo</p>
+        {items()}
+      </nav>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        className="fixed bottom-5 left-4 z-30 rounded-full bg-primary-300 px-4 py-3 text-sm font-semibold text-dark-950 shadow-lg xl:hidden"
+      >
+        Índice do artigo
+      </button>
+      {open && (
+        <Modal
+          title="Índice do artigo"
+          side="left"
+          closeAt={1280}
+          onClose={() => setOpen(false)}
+        >
+          <nav aria-label="Seções do artigo">{items()}</nav>
+        </Modal>
+      )}
+    </>
   );
-};
-
-export default TableOfContents;
+}
