@@ -54,17 +54,22 @@ const BlogList: React.FC<BlogListProps> = ({
     }
 
     // Sort by most recent date
-    const sorted = [...filtered].sort((a, b) => {
+    const sorted = filtered.toSorted((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
     return sorted;
   }, [posts, selectedDate, selectedTag]);
 
-  // Reset display count when filters change
-  React.useEffect(() => {
+  // Reset display count when filters change. Derived during render (per React's
+  // "adjusting state when props change" guidance) instead of in an effect, so we
+  // avoid the extra render/commit an effect-based reset would trigger.
+  const filterKey = `${selectedDate ?? ''}|${selectedTag ?? ''}`;
+  const [prevFilterKey, setPrevFilterKey] = React.useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
     setDisplayCount(POSTS_PER_LOAD);
-  }, [selectedDate, selectedTag]);
+  }
 
   // Get posts to display
   const displayedPosts = filteredPosts.slice(0, displayCount);

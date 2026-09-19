@@ -1,0 +1,63 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "react",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "jsx-a11y",
+    "nextjs"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    // Next.js/React 19 use the automatic JSX runtime (jsx: "react-jsx" in
+    // tsconfig.json), so `React` doesn't need to be in scope for JSX to work.
+    // eslint-config-next disabled this the same way via `react/jsx-runtime`.
+    "react/react-in-jsx-scope": "off"
+  },
+  "env": {
+    "builtin": true
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    "node_modules/**",
+    "public/sw.js",
+    "public/workbox-*.js",
+    "public/swe-worker-*.js"
+  ],
+  "overrides": [
+    {
+      "files": ["vitest.setup.ts", "**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        // Side-effect-only imports (test matchers, polyfills) are the
+        // idiomatic pattern in test setup/spec files.
+        "import/no-unassigned-import": "off",
+        // Test files mock `next/image` with a plain `<img>` so jsdom can
+        // render it; these aren't real UI markup, so the Next.js image and
+        // a11y alt-text rules don't apply here.
+        "nextjs/no-img-element": "off",
+        "jsx-a11y/alt-text": "off",
+        // A couple of tests render a deliberately empty `<h2></h2>` fixture
+        // to exercise the "heading has no textContent" fallback branch; it's
+        // a synthetic DOM fixture, not real UI markup.
+        "jsx-a11y/heading-has-content": "off",
+        // Mock factory helpers (e.g. the `framer-motion`/`next/image` mocks)
+        // must stay defined inside `vi.mock(...)` factories: Vitest's hoisting
+        // forbids referencing outer-scope consts from a factory unless they're
+        // prefixed with "mock" or wrapped in `vi.hoisted()`, so "move it
+        // outside" isn't a safe fix here. Per-test helper closures (e.g.
+        // `getYearToggleButton`) are also often duplicated by name across
+        // `it()` blocks, which prevents hoisting them to module scope.
+        "unicorn/consistent-function-scoping": "off"
+      }
+    }
+  ]
+}

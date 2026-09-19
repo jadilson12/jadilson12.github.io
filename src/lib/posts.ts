@@ -42,15 +42,11 @@ export function getSortedPostsData(): PostData[] {
 
     const id = slug;
 
-    return {
-      id,
-      slug: slug,
-      ...matterResult.data,
-    } as PostData;
+    return Object.assign({ id, slug }, matterResult.data) as PostData;
   });
 
   // Sort posts by date
-  return allPostsData.sort((a, b) => {
+  return allPostsData.toSorted((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {

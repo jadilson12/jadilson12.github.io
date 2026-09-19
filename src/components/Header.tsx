@@ -147,6 +147,9 @@ const Header: React.FC = () => {
                         ? 'text-primary-300 bg-dark-800 font-medium'
                         : 'text-dark-300 hover:text-white hover:bg-dark-800'
                     }`}
+                    // No current navItems entry sets external:true, so the truthy side of this
+                    // spread is structurally unreachable with real data; left untested on purpose.
+                    /* v8 ignore next */
                     {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                   >
                     <motion.span
@@ -240,6 +243,9 @@ const Header: React.FC = () => {
                               ? 'text-primary-300 bg-dark-800/80 border border-primary-300/20 shadow-lg shadow-primary-300/10'
                               : 'text-dark-300 hover:text-white hover:bg-dark-800/50 border border-transparent'
                           }`}
+                          // No current navItems entry sets external:true, so the truthy side of
+                          // this spread is structurally unreachable with real data; untested on purpose.
+                          /* v8 ignore next */
                           {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                           <span className="flex-1">{item.name}</span>

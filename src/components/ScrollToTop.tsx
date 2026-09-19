@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
+
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -21,13 +28,6 @@ const ScrollToTop = () => {
       window.removeEventListener('scroll', toggleVisibility);
     };
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
 
   return (
     <button

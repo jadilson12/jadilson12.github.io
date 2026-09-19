@@ -2,7 +2,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import React, { useRef } from 'react';
-import AnimatedText, { AnimatedWords, GradientText } from './AnimatedText';
+import { GradientText } from './AnimatedText';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);

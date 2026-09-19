@@ -33,6 +33,12 @@ const FloatingTocButton: React.FC = () => {
       };
     });
 
+    // This effect synchronizes React with two external systems (the DOM
+    // headings rendered by the MDX article content, and an IntersectionObserver
+    // subscription) that can't be read during render, so `setState` here isn't
+    // the "derive state from props" anti-pattern the rule otherwise guards
+    // against.
+    // oxlint-disable-next-line react/set-state-in-effect
     setHeadings(items);
 
     // Intersection Observer to track active section

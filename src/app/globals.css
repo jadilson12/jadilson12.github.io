@@ -366,14 +366,6 @@ body {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
-
-  /* Ensure fixed header works on mobile */
-  header {
-    position: fixed !important;
-    top: 0 !important;
-    width: 100% !important;
-    z-index: 9999 !important;
-  }
 }
 
 /* Premium animations */

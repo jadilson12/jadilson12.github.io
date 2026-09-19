@@ -9,7 +9,11 @@ interface ShareButtonsProps {
   description?: string;
 }
 
-const ShareButtons: React.FC<ShareButtonsProps> = ({ title, url, description }) => {
+const handleShare = (platform: string, shareUrl: string) => {
+  window.open(shareUrl, '_blank', 'width=600,height=400');
+};
+
+const ShareButtons: React.FC<ShareButtonsProps> = ({ title, url }) => {
   const [copied, setCopied] = useState(false);
 
   const shareLinks = {
@@ -27,10 +31,6 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ title, url, description }) 
     } catch (err) {
       console.error('Failed to copy:', err);
     }
-  };
-
-  const handleShare = (platform: string, shareUrl: string) => {
-    window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
   return (

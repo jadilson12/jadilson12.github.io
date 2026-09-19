@@ -127,7 +127,7 @@ const TreeNode = ({
 
             {/* Render Children */}
             {node.children!.map((edge, index) => (
-              <div key={index} className="flex flex-col items-center relative">
+              <div key={edge.node.id} className="flex flex-col items-center relative">
                 {/* Horizontal Connector Logic:
                     We need a horizontal line connecting all children at the top.
                     We can draw a line at the top of each child container that connects to the center.
@@ -174,7 +174,6 @@ const ZoomableContainer = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartDistance = useRef<number>(0);
   const lastScale = useRef<number>(1);
-  const lastPosition = useRef({ x: 0, y: 0 });
   const dragStart = useRef({ x: 0, y: 0 });
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -273,6 +272,7 @@ const ZoomableContainer = ({
           onClick={handleZoomOut}
           className="p-2 bg-dark-800 hover:bg-dark-700 text-dark-200 hover:text-white rounded-lg border border-dark-700 transition-colors shadow-lg"
           title="Diminuir Zoom"
+          aria-label="Diminuir Zoom"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -289,6 +289,7 @@ const ZoomableContainer = ({
           onClick={handleZoomIn}
           className="p-2 bg-dark-800 hover:bg-dark-700 text-dark-200 hover:text-white rounded-lg border border-dark-700 transition-colors shadow-lg"
           title="Aumentar Zoom"
+          aria-label="Aumentar Zoom"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -297,6 +298,15 @@ const ZoomableContainer = ({
       </div>
 
       {/* Zoomable Content */}
+      {/*
+        This div only adds a supplementary pinch/drag gesture layer; the
+        Zoom In/Out/Reset buttons above are the fully keyboard- and
+        screen-reader-accessible equivalent. Giving it an interactive role
+        would misrepresent it to assistive tech (it isn't keyboard
+        operable), so the static-element-interactions check is disabled here
+        rather than worked around with a role.
+      */}
+      {/* oxlint-disable-next-line jsx-a11y/no-static-element-interactions -- see comment above */}
       <div
         ref={containerRef}
         className="overflow-hidden select-none"
@@ -325,14 +335,17 @@ const ZoomableContainer = ({
   );
 };
 
+// Helper to render portal safely. Declared at module scope (rather than inside
+// Infographic) so it isn't recreated on every render.
+const Portal = ({ children }: { children: React.ReactNode }) => {
+  // SSR guard: `document` is always defined under jsdom; unreachable in tests.
+  /* v8 ignore next */
+  if (typeof document === 'undefined') return null;
+  return createPortal(children, document.body);
+};
+
 const Infographic = ({ data }: InfographicProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  // Helper to render portal safely
-  const Portal = ({ children }: { children: React.ReactNode }) => {
-    if (typeof document === 'undefined') return null;
-    return createPortal(children, document.body);
-  };
 
   return (
     <>
@@ -348,6 +361,7 @@ const Infographic = ({ data }: InfographicProps) => {
           onClick={() => setIsOpen(true)}
           className="absolute top-4 right-4 p-2 bg-dark-800 hover:bg-dark-700 text-dark-200 hover:text-white rounded-lg border border-dark-700 transition-colors shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100"
           title="Expandir Infográfico"
+          aria-label="Expandir Infográfico"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -377,6 +391,7 @@ const Infographic = ({ data }: InfographicProps) => {
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 text-dark-400 hover:text-white transition-colors bg-dark-800 rounded-lg"
+                    aria-label="Fechar"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

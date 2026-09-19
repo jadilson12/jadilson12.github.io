@@ -47,7 +47,7 @@ export default async function YearPage({ params }: { params: Promise<{ year: str
   }, {} as Record<string, typeof yearPosts>);
 
   // Sort months in descending order
-  const sortedMonths = Object.keys(postsByMonth).sort((a, b) => b.localeCompare(a));
+  const sortedMonths = Object.keys(postsByMonth).toSorted((a, b) => b.localeCompare(a));
 
   return (
     <Layout>

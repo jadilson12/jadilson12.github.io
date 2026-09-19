@@ -5,6 +5,14 @@
 /.pnp
 .pnp.js
 
+# yarn berry
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # testing
 /coverage
 
@@ -62,3 +70,4 @@ Thumbs.db
 CLAUDE.md
 DEPLOYMENT.md
 .playwright-mcp
+.ai-jail

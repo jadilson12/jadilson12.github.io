@@ -57,11 +57,11 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
     // Sort posts within each month by date (most recent first)
     Object.values(groups).forEach(yearGroup => {
       Object.values(yearGroup.months).forEach(monthData => {
-        monthData.posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        monthData.posts = monthData.posts.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       });
     });
 
-    return Object.values(groups).sort((a, b) => b.year.localeCompare(a.year));
+    return Object.values(groups).toSorted((a, b) => b.year.localeCompare(a.year));
   }, [posts]);
 
   const toggleYear = (year: string) => {
@@ -101,7 +101,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
     });
 
     return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
+      .toSorted((a, b) => b[1] - a[1])
       .map(([tag, count]) => ({ tag, count }));
   }, [posts]);
 
@@ -157,6 +157,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
                   <button
                     onClick={() => toggleYear(yearGroup.year)}
                     className="p-1 hover:text-primary-300 transition-colors duration-200"
+                    aria-label={isYearExpanded ? `Recolher ${yearGroup.year}` : `Expandir ${yearGroup.year}`}
                   >
                     <svg
                       className={`w-4 h-4 transition-transform duration-200 ${isYearExpanded ? 'rotate-180' : ''}`}
@@ -179,7 +180,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
                     className="ml-3 space-y-1"
                   >
                     {Object.entries(yearGroup.months)
-                      .sort((a, b) => b[0].localeCompare(a[0]))
+                      .toSorted((a, b) => b[0].localeCompare(a[0]))
                       .map(([month, data]) => {
                         const monthNum = parseInt(month) - 1;
                         const monthName = monthNames[monthNum];

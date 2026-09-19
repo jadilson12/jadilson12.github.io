@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import PageTransition from "@/components/PageTransition";
 import ClientLayout from "@/components/ClientLayout";
 import { Geist, Geist_Mono } from "next/font/google";
+// Global stylesheet import: the standard Next.js pattern for loading global
+// CSS from the root layout. There's nothing meaningful to assign it to.
+// oxlint-disable-next-line import/no-unassigned-import
 import "./globals.css";
 
 const geistSans = Geist({

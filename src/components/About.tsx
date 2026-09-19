@@ -64,7 +64,7 @@ const About: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 gap-8 md:gap-12 items-start"
+          className="grid md:grid-cols-2 gap-8 md:gap-12 items-center"
         >
           {/* Left side - Image */}
           <motion.div variants={imageVariants} className="relative px-4 md:px-0">

@@ -31,15 +31,18 @@ const BlogPageClient: React.FC<BlogPageClientProps> = ({ posts }) => {
     (state, newFilters: FilterState) => newFilters
   );
 
-  // Update filters when URL params change
-  React.useEffect(() => {
-    const date = searchParams.get('date') || '';
-    const tag = searchParams.get('tag') || '';
-
-    if (date !== filters.selectedDate || tag !== filters.selectedTag) {
-      setFilters({ selectedDate: date, selectedTag: tag });
-    }
-  }, [searchParams, filters.selectedDate, filters.selectedTag]);
+  // Update filters when URL params change (e.g. browser back/forward). Derived
+  // during render (per React's "adjusting state when props change" guidance)
+  // instead of in an effect, since `searchParams` is external, prop-like input.
+  const searchKey = `${searchParams.get('date') || ''}|${searchParams.get('tag') || ''}`;
+  const [prevSearchKey, setPrevSearchKey] = React.useState(searchKey);
+  if (searchKey !== prevSearchKey) {
+    setPrevSearchKey(searchKey);
+    setFilters({
+      selectedDate: searchParams.get('date') || '',
+      selectedTag: searchParams.get('tag') || '',
+    });
+  }
 
   const handleDateClick = (date: string) => {
     const newFilters = {

@@ -6,18 +6,18 @@ interface CodeBlockProps {
   className?: string;
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
-  // Helper to extract text from React children (handles strings, arrays, and elements)
-  const extractText = (node: React.ReactNode): string => {
-    if (typeof node === 'string') return node;
-    if (Array.isArray(node)) return node.map(extractText).join('');
-    if (React.isValidElement(node)) {
-      const element = node as React.ReactElement<any>;
-      if (element.props.children) return extractText(element.props.children);
-    }
-    return '';
-  };
+// Helper to extract text from React children (handles strings, arrays, and elements)
+const extractText = (node: React.ReactNode): string => {
+  if (typeof node === 'string') return node;
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  if (React.isValidElement(node)) {
+    const element = node as React.ReactElement<any>;
+    if (element.props.children) return extractText(element.props.children);
+  }
+  return '';
+};
 
+const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   // Extract the code content
   const codeContent = extractText(children);
 

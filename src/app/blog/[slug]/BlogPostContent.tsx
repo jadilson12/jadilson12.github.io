@@ -28,7 +28,7 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => 
             ]}
           />
 
-          <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 items-start">{/* Sidebar - Table of Contents */}
+          <div className="flex flex-col xl:flex-row gap-6 xl:gap-8">{/* Sidebar - Table of Contents */}
             <TableOfContents />
 
           {/* Main Content */}
@@ -117,6 +117,8 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, children }) => 
               {/* Share Buttons */}
               <ShareButtons
                 title={post.title}
+                // SSR guard: window is always defined under jsdom; unreachable in tests.
+                /* v8 ignore next */
                 url={typeof window !== 'undefined' ? window.location.href : ''}
                 description={post.description}
               />

@@ -10,6 +10,7 @@ const Mermaid: React.FC<MermaidProps> = ({ chart }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    /* v8 ignore else -- containerRef.current is always set synchronously by React before this mount-only effect runs; the false branch is unreachable through any public rendering API. */
     if (containerRef.current) {
       mermaid.initialize({
         startOnLoad: false,
