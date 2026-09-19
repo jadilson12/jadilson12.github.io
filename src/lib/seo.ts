@@ -22,7 +22,7 @@ export function pageMetadata({
       height: 630,
       alt:
         post?.title ||
-        `${site.name} — ${site.profession}. jadilson.dev. GitHub, LinkedIn, X e ${site.email}.`,
+        `${site.name} — ${site.profession}. jadilson.dev. GitHub, LinkedIn e X.`,
     },
   ];
 

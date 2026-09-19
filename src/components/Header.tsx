@@ -1,18 +1,51 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 import Modal from './Modal';
 
 const sections = ['home', 'sobre', 'contato'];
 const navItems = [
-  { name: 'Início', href: '/', sectionId: 'home' },
   { name: 'Sobre', href: '/sobre', sectionId: 'sobre' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Contato', href: '/contato', sectionId: 'contato' },
 ];
+
+function SearchForm({ className = '' }: { className?: string }) {
+  const router = useRouter();
+  const pathname = usePathname().replace(/\/$/, '') || '/';
+  const searchParams = useSearchParams();
+  const urlQuery = pathname === '/blog' ? searchParams.get('q') || '' : '';
+
+  const [value, setValue] = useState(urlQuery);
+  const [prevUrlQuery, setPrevUrlQuery] = useState(urlQuery);
+  if (urlQuery !== prevUrlQuery) {
+    setPrevUrlQuery(urlQuery);
+    setValue(urlQuery);
+  }
+
+  return (
+    <search className={className}>
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          const q = value.trim();
+          router.push(q ? `/blog?q=${encodeURIComponent(q)}` : '/blog');
+        }}
+      >
+        <input
+          type="search"
+          value={value}
+          onChange={event => setValue(event.target.value)}
+          placeholder="Buscar artigos"
+          aria-label="Buscar artigos"
+          className="min-h-11 w-full min-w-0 rounded-lg border border-dark-600 bg-dark-800 px-3 text-base text-white"
+        />
+      </form>
+    </search>
+  );
+}
 
 export default function Header() {
   const [menuPath, setMenuPath] = useState<string | null>(null);
@@ -79,6 +112,9 @@ export default function Header() {
             <span>jadilson</span>
             <span className="text-primary-300">.dev</span>
           </Link>
+          <Suspense fallback={null}>
+            <SearchForm className="hidden w-48 lg:flex" />
+          </Suspense>
           <div className="hidden items-center gap-1 md:flex">{links()}</div>
           <button
             type="button"
@@ -109,6 +145,9 @@ export default function Header() {
           closeAt={768}
           onClose={() => setMenuPath(null)}
         >
+          <Suspense fallback={null}>
+            <SearchForm className="mb-4" />
+          </Suspense>
           <nav aria-label="Navegação móvel" className="space-y-2">
             {links(true)}
           </nav>

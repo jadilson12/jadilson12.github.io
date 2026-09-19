@@ -1,6 +1,5 @@
 'use client';
 
-import Breadcrumb from '@/components/Breadcrumb';
 import type { PostData } from '@/lib/posts';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -27,15 +26,6 @@ const YearPageClient: React.FC<YearPageClientProps> = ({
   return (
     <div id="main-content" tabIndex={-1} className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20">
       <div className="container-custom max-w-5xl px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <Breadcrumb
-          items={[
-            { label: 'Home', href: '/' },
-            { label: 'Blog', href: '/blog' },
-            { label: year },
-          ]}
-        />
-
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

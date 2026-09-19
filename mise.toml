@@ -1,0 +1,18 @@
+[tools]
+node = "24"
+
+[tasks.dev]
+description = "Start the Next.js dev server"
+run = "yarn dev"
+
+[tasks.build]
+description = "Build for production"
+run = "yarn build"
+
+[tasks.test]
+description = "Run the test suite"
+run = "yarn test"
+
+[tasks.lint]
+description = "Run oxlint"
+run = "yarn lint"

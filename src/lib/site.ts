@@ -2,11 +2,10 @@ export const site = {
   url: 'https://jadilson.dev',
   name: 'Jadilson Guedes',
   profession: 'Engenheiro de Software',
-  email: 'contato@jadilson.dev',
   portrait: '/images/jadilson-guedes.jpg',
   title: 'Jadilson Guedes - Engenheiro de Software | IA, Cloud & DevOps',
   description:
-    'Engenheiro de Software com 8+ anos desenvolvendo soluções completas do planejamento à implantação. Especialista em on-premise, cloud e integração com IA.',
+    'Engenheiro de Software com 20+ anos de trajetória em tecnologia, desenvolvendo soluções completas do planejamento à implantação. Especialista em on-premise, cloud e integração com IA.',
   language: 'pt-BR',
   socialProfiles: [
     'https://github.com/jadilson12',

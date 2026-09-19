@@ -1,6 +1,5 @@
 'use client';
 
-import Breadcrumb from '@/components/Breadcrumb';
 import FloatingTocButton from '@/components/FloatingTocButton';
 import ShareButtons from '@/components/ShareButtons';
 import TableOfContents from '@/components/TableOfContents';
@@ -31,21 +30,12 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({
         className="min-h-screen pt-20 md:pt-32 pb-12 md:pb-20"
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          {/* Breadcrumb */}
-          <Breadcrumb
-            items={[
-              { label: 'Início', href: '/' },
-              { label: 'Blog', href: '/blog' },
-              { label: post.title },
-            ]}
-          />
-
           <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 items-start">
             {/* Sidebar - Table of Contents */}
             <TableOfContents headings={headings} />
 
             {/* Main Content */}
-            <div className="min-w-0 flex-1 w-full max-w-4xl xl:mx-auto">
+            <div className="min-w-0 flex-1 w-full max-w-4xl mx-auto">
               {/* Rest of the content */}
               <motion.div
                 initial={false}
@@ -53,15 +43,34 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({
                 transition={{ duration: 0.6 }}
               >
                 {/* Header */}
-                <header className="mb-8 md:mb-12">
+                <header className="mb-8 text-center md:mb-12">
                   <motion.h1
                     initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 md:mb-6"
+                    className="text-3xl md:text-4xl font-serif font-bold tracking-tight text-white mb-4 md:mb-6"
                   >
                     {post.title}
                   </motion.h1>
+
+                  {post.tags && post.tags.length > 0 && (
+                    <motion.div
+                      initial={false}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.15 }}
+                      className="mb-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-dark-400"
+                    >
+                      {post.tags.map(tag => (
+                        <Link
+                          key={tag}
+                          href={`/blog?tag=${encodeURIComponent(tag)}`}
+                          className="hover:text-primary-300"
+                        >
+                          #{tag}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
 
                   <motion.p
                     initial={false}
@@ -109,31 +118,6 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({
                 >
                   {children}
                 </motion.div>
-
-                {/* Tags */}
-                {post.tags && post.tags.length > 0 && (
-                  <motion.div
-                    initial={false}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.7 }}
-                    className="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-dark-700"
-                  >
-                    <h3 className="text-sm font-semibold text-dark-400 uppercase tracking-wider mb-3 md:mb-4">
-                      Tags
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map(tag => (
-                        <Link
-                          key={tag}
-                          href={`/blog?tag=${encodeURIComponent(tag)}`}
-                          className="px-4 py-2 text-sm bg-dark-800 text-primary-300 rounded-full border border-primary-300/20 hover:bg-dark-700 hover:border-primary-300/40 transition-colors duration-200 cursor-pointer inline-block"
-                        >
-                          #{tag}
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
 
                 {/* Share Buttons */}
                 <ShareButtons

@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const years = [...new Set(posts.map(post => post.date.slice(0, 4)))];
 
   return [
-    ...['/', '/sobre', '/contato', '/blog'].map(path => ({
+    ...['/', '/sobre', '/blog'].map(path => ({
       url: canonicalUrl(path),
     })),
     ...years.map(year => ({ url: canonicalUrl(`/blog/year/${year}`) })),

@@ -19,7 +19,6 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
   output: 'export',
   reactCompiler: true,
-  allowedDevOrigins: ['192.168.1.40'],
   images: {
     unoptimized: true, // Required for static export
     remotePatterns: [

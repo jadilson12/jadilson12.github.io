@@ -58,7 +58,6 @@ export default function BlogPageClient({ posts }: { posts: PostData[] }) {
       <BlogList
         posts={posts}
         query={filters.query}
-        onSearch={query => updateFilters({ ...filters, query })}
         onClear={() =>
           updateFilters({ query: '', selectedDate: '', selectedTag: '' })
         }
