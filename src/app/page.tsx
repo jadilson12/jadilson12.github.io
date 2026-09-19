@@ -1,7 +1,6 @@
 import { site } from '@/lib/site';
 import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
-import Hero from '@/components/Hero';
 import Layout from '@/components/Layout';
 import { pageMetadata, webPageSchema } from '@/lib/seo';
 import JsonLd from '@/components/JsonLd';
@@ -10,12 +9,6 @@ import JsonLd from '@/components/JsonLd';
 const About = dynamic(() => import('@/components/About'), {
   loading: () => <div className="min-h-[400px]" />,
 });
-const ContatoPageClient = dynamic(
-  () => import('@/app/contato/ContatoPageClient'),
-  {
-    loading: () => <div className="min-h-[400px]" />,
-  }
-);
 const Footer = dynamic(() => import('@/components/Footer'), {
   loading: () => <div className="min-h-[200px]" />,
 });
@@ -37,9 +30,7 @@ export default function Home() {
       />
       <Header />
       <main id="main-content" tabIndex={-1}>
-        <Hero />
         <About />
-        <ContatoPageClient headingLevel="h2" />
       </main>
       <Footer />
     </Layout>

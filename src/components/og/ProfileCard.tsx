@@ -174,7 +174,6 @@ export default function ProfileCard({ photo }: { photo: string }) {
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
             borderTop: '1px solid #35402d',
             paddingTop: 22,
@@ -197,7 +196,6 @@ export default function ProfileCard({ photo }: { photo: string }) {
               </div>
             ))}
           </div>
-          <div style={{ color: '#d4ddcb', fontSize: 21 }}>{site.email}</div>
         </div>
       </div>
     </div>

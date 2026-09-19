@@ -32,7 +32,7 @@ export function articleMarkdown(slug: string) {
 }
 
 export function profileMarkdown() {
-  return `# ${site.name}\n\n> ${site.description}\n\nResumo do perfil publicado em ${canonicalUrl('/sobre')}.\n\n- Site: ${canonicalUrl()}\n- Perfil completo: ${canonicalUrl('/sobre')}\n- Contato: ${canonicalUrl('/contato')}\n\n## Perfis públicos\n\n${site.socialProfiles.map(url => `- ${url}`).join('\n')}\n`;
+  return `# ${site.name}\n\n> ${site.description}\n\nResumo do perfil publicado em ${canonicalUrl('/sobre')}.\n\n- Site: ${canonicalUrl()}\n- Perfil completo: ${canonicalUrl('/sobre')}\n\n## Perfis públicos\n\n${site.socialProfiles.map(url => `- ${url}`).join('\n')}\n`;
 }
 
 export function llmsIndex() {
